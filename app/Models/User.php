@@ -30,6 +30,9 @@ class User extends Authenticatable implements FilamentUser
         'address',
     ];
 
+    public const PARENT_ROlE = 'parent';
+    public const ADMIN_ROLE = 'admin';
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -59,7 +62,7 @@ class User extends Authenticatable implements FilamentUser
         return match ($panel->getId()) {
             'superadmin' => $this->is_superadmin,
 
-            'admin' => $this->is_superadmin || $this->hasRole('Admin'),
+            'admin' => $this->is_superadmin || $this->hasRole(self::ADMIN_ROLE),
 
             default => false,
         };
@@ -68,7 +71,13 @@ class User extends Authenticatable implements FilamentUser
     //Relation
     public function students()
     {
-        return $this->belongsToMany(Student::class);
+        return $this->belongsToMany(Student::class, 'student_user');
     }
+
+    public function studyRecords()
+    {
+        return $this->hasMany(StudyRecord::class, 'created_by');
+    }
+
 }
 

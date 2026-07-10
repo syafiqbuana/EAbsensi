@@ -7,7 +7,7 @@ use App\Filament\Admin\Resources\Schedules\Pages\EditSchedule;
 use App\Filament\Admin\Resources\Schedules\Pages\ListSchedules;
 use App\Filament\Admin\Resources\Schedules\Schemas\ScheduleForm;
 use App\Filament\Admin\Resources\Schedules\Tables\SchedulesTable;
-use App\Models\Schedule;
+use App\Models\Schedules;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -16,7 +16,7 @@ use Filament\Tables\Table;
 
 class ScheduleResource extends Resource
 {
-    protected static ?string $model = Schedule::class;
+    protected static ?string $model = Schedules::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Superadmin\Resources\Users\Pages;
+namespace App\Filament\Admin\Resources\Users\Pages;
 
-use App\Filament\Superadmin\Resources\Users\UserResource;
+use App\Filament\Admin\Resources\Users\UserResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
@@ -16,6 +16,4 @@ class EditUser extends EditRecord
             DeleteAction::make(),
         ];
     }
-
-
 }

@@ -13,9 +13,10 @@ class Schedules extends Model
         'time_close' => 'datetime:H:i:s',
     ];
 
-    public function students()
+    public function classes()
     {
-        return $this->belongsToMany(Student::class);
+        return $this->belongsToMany(Classes::class, 'schedule_class');
     }
 
+    
 }

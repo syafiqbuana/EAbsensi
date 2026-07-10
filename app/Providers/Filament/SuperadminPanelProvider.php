@@ -29,7 +29,7 @@ class SuperadminPanelProvider extends PanelProvider
             ->path('superadmin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Lime,
             ])
             ->discoverResources(
                 in: app_path('Filament/Superadmin/Resources'),
@@ -47,8 +47,7 @@ class SuperadminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
+            
             ])
             ->middleware([
                 EncryptCookies::class,

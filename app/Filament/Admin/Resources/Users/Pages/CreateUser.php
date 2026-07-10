@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Superadmin\Resources\Users\Pages;
+namespace App\Filament\Admin\Resources\Users\Pages;
 
-use App\Filament\Superadmin\Resources\Users\UserResource;
+use App\Filament\Admin\Resources\Users\UserResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateUser extends CreateRecord
@@ -14,8 +14,8 @@ class CreateUser extends CreateRecord
         return $this->getResource()::getUrl('index');
     }
 
-    protected function afterSave() 
+    protected function afterCreate()
     {
-        $this->record->syncRoles($this->data['roles'] ?? []);
+        $this->record->assignRole('parent');
     }
 }

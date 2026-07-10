@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Filament\Superadmin\Resources\Users\Schemas;
+namespace App\Filament\Admin\Resources\Users\Schemas;
 
-use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextArea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
-use Spatie\Permission\Models\Role;
-use Filament\Forms\Components\TextArea;
 
 class UserForm
 {
@@ -15,7 +13,7 @@ class UserForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('Namq')
+                    ->label('Nama')
                     ->required()
                     ->maxLength(255),
                 TextInput::make('email')
@@ -23,14 +21,10 @@ class UserForm
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Select::make('roles')
-                    ->label('Role')
-                    ->relationship('roles', 'name')
-                    ->multiple()
-                    ->preload(),
                 TextArea::make('address')
                     ->label('Alamat')
-                    ->required(),
+                    ->required()
+                    ->columnSpanFull(),
                 TextInput::make('password')
                     ->password()
                     ->required(fn(string $operation) => $operation === 'create')
@@ -41,8 +35,7 @@ class UserForm
                     ->password()
                     ->required(fn(string $operation) => $operation === 'create')
                     ->same('password')
-                    ->dehydrated(false)
-
+                    ->dehydrated(false),
             ]);
     }
 }
