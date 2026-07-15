@@ -42,12 +42,15 @@ class ClassResource extends Resource
         ];
     }
 
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder {
+        return parent::getEloquentQuery()
+            ->orderBy('order','asc');
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => ListClasses::route('/'),
-            'create' => CreateClass::route('/create'),
-            'edit' => EditClass::route('/{record}/edit'),
+            'index' => ListClasses::route('/'),      
         ];
     }
 }

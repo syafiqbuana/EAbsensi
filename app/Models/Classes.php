@@ -12,9 +12,21 @@ class Classes extends Model
         'order' => 'integer',
     ];
 
+    public static function booted() {
+
+        static::creating(function ($classes){
+            $classes->order = Classes::max('order') + 1;
+        });
+    }
+
     public function schedules()
     {
-        return $this->belongsToMany(Schedules::class,'schedule_class');
+        return $this->belongsToMany(Schedules::class,'schedule_class','class_id','schedule_id')->withTimestamps();
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'class_id');
     }
 
     public function studyRecords()

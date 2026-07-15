@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources\Students\Tables;
 
 use App\Models\Student;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -10,6 +11,7 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+
 
 class StudentsTable
 {
@@ -45,7 +47,9 @@ class StudentsTable
                 EditAction::make(),
                 ViewAction::make()
                     ->label('Lihat')
-                    ->icon('heroicon-o-eye')
+                    ->icon('heroicon-o-eye'),
+                Action::make('change_class')
+                    ->label('Pindah Kelas')
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

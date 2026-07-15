@@ -6,6 +6,7 @@ use App\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -18,19 +19,28 @@ class StudentForm
                 Section::make('Informasi Anak')
                     ->columnSpanFull()
                     ->schema([
-                        TextInput::make('name')
-                            ->label('Nama lengkap')
-                            ->required()
-                            ->maxLength(255),
-                        DatePicker::make('birth_date')
-                            ->label('Tanggal Lahir')
-                            ->maxDate(now())
-                            ->native(false)
-                            ->required(),
-                        TextInput::make('birth_place')
-                            ->label('Tempat Lahir')
-                            ->required()
-                            ->maxLength(255),
+                        Grid::make(2)
+                            ->schema([
+                                TextInput::make('name')
+                                    ->label('Nama lengkap')
+                                    ->required()
+                                    ->maxLength(255),
+                                DatePicker::make('birth_date')
+                                    ->label('Tanggal Lahir')
+                                    ->maxDate(now())
+                                    ->native(false)
+                                    ->required(),
+                                TextInput::make('birth_place')
+                                    ->label('Tempat Lahir')
+                                    ->required()
+                                    ->maxLength(255),
+                                Select::make('class_id')
+                                    ->label('Kelas')
+                                    ->relationship('classes', 'name')
+                                    ->preload()
+                                    ->required()
+                                    ->searchable(),
+                            ]),
                         Select::make('gender')
                             ->label('Jenis Kelamin')
                             ->native(false)
