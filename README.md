@@ -1,59 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# EAbsensi 🎓
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/PHP-8.3-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.3">
+  <img src="https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 12">
+  <img src="https://img.shields.io/badge/Livewire-4E56A6?style=for-the-badge&logo=livewire&logoColor=white" alt="Livewire">
+  <img src="https://img.shields.io/badge/Filament-5-E5A50A?style=for-the-badge&logo=filament&logoColor=white" alt="Filament">
 </p>
 
-## About Laravel
+## 📖 Project Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**EAbsensi** is Student Attendance Management System designed to streamline administrative workflows, academic scheduling, and daily attendance tracking. 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Engineered with the modern PHP ecosystem, this system leverages **Laravel 12** and **PHP 8.3** for robust backend performance. The frontend and administration interfaces are powered by **Filament 5**, **Livewire**, and **Flux UI**, delivering a seamless, highly responsive, and beautiful user experience for both school administrators and parents.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## ✨ Key Features
 
-## Learning Laravel
+* **🚀 Smart QR Code Attendance:** Automated generation of unique QR tokens for rapid, touchless daily check-ins. Supports digital ID card exports.
+* **🛡️ Role-Based Access Control (RBAC):** Secure, isolated portals for different user types:
+  * **Admin Portal:** Full control over master data, schedules, users, and comprehensive reporting.
+  * **Parent Portal:** Dedicated secure access for parents to monitor their own child's real-time attendance and study progress.
+* **📅 Dynamic Scheduling & Holiday Management:** Highly customizable class schedules mapped to specific days and times, integrated with a robust holiday management module to automatically adjust attendance requirements.
+* **🗃️ Deep Record Memory:** Maintains comprehensive historical logs ("memories") of past student attendances, academic progress, and system activities. Includes built-in tools for database structure visibility and monitoring.
+* **🔒 Advanced Security:** Hardened user authentication supporting Two-Factor Authentication (2FA) and modern Passkey integration.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🛠️ Tech Stack
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* **Core Framework:** [Laravel 12](https://laravel.com) (PHP 8.3)
+* **Admin Panel:** [Filament 5](https://filamentphp.com)
+* **Frontend & UI:** [Livewire](https://livewire.laravel.com), [Flux UI](https://fluxui.dev), Tailwind CSS
+* **Database:** MySQL / PostgreSQL
+* **Authentication:** Laravel Fortify (with 2FA & Passkey support)
 
-## Laravel Sponsors
+## 📋 Prerequisites
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Before you begin, ensure you have met the following requirements:
+* **PHP** >= 8.3
+* **Composer** >= 2.0
+* **Node.js** & **NPM** (for compiling frontend assets)
+* **MySQL** >= 8.0 or **MariaDB** equivalent
 
-### Premium Partners
+## 🚀 Installation & Setup
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/syafiqbuana/eabsensi.git
+   cd eabsensi
+   ```
 
-## Contributing
+2. **Install PHP dependencies:**
+   ```bash
+   composer install
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. **Install NPM dependencies:**
+   ```bash
+   npm install && npm run build
+   ```
 
-## Code of Conduct
+4. **Environment Setup:**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+   *Configure your database credentials and other necessary environment variables in the `.env` file.*
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+5. **Database Migration & Seeding:**
+   ```bash
+   php artisan migrate --seed
+   ```
+   *This will create the necessary database structure and populate initial master data, including the superadmin account and sample schedules.*
 
-## Security Vulnerabilities
+6. **Link Storage:**
+   ```bash
+   php artisan storage:link
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+7. **Run the Application:**
+   ```bash
+   php artisan serve
+   ```
+   *Access the admin panel at `http://localhost:8000/admin`.*
 
-## License
+## 🗄️ Database Structure Overview
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The system is built on a highly relational database architecture optimized for speed and data integrity:
+* `users` / `roles` / `permissions` - Handles RBAC, 2FA, and Passkeys.
+* `students` / `classes` - Manages student demographics and class assignments.
+* `schedules` / `schedule_class` - Maps operational hours to specific classes and days.
+* `attendances` - Tracks daily check-ins, timestamps, and status (Present, Sick, Absent, Permission, Holiday).
+* `holidays` / `holiday_schedule` - Overrides standard attendance expectations during configured global or specific holidays.
+
+## 👨‍💻 Author
+
+**Syafiq Galih Rengga Buana**
+* Full-Stack Web Developer
+* Passionate about building impactful applications using the TALL stack.
+
