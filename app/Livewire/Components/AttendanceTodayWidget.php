@@ -7,65 +7,63 @@ use Livewire\Component;
 
 class AttendanceTodayWidget extends Component
 {
-    // Gunakan satu variabel array untuk menampung semua data anak
     public array $studentsData = [];
 
     public function mount()
     {
-        // 1. Ambil user beserta semua siswanya (lengkap dengan kelas dan jadwal)
-        $user = auth()->user()->load('students.classes.schedules');
+        // 1. Ambil user beserta siswa dan kelasnya.
+        // 2. Load attendance HANYA untuk hari ini beserta jadwalnya.
+        $user = auth()->user()->load([
+            'students.classes',
+            'students.attendances' => function ($query) {
+                $query->whereDate('date', Carbon::today())->with('schedule');
+            }
+        ]);
+        
         $students = $user->students;
 
-        // 2. Looping setiap siswa milik user tersebut
+        // 3. Looping setiap siswa milik user tersebut
         foreach ($students as $student) {
-            $class = $student->classes; // Asumsi belongsTo sesuai kodemu
+            $class = $student->classes; // Asumsi relasi belongsTo sudah benar di model
 
-            // Data default jika tidak ada kelas/jadwal
+            // Ambil absensi hari ini (karena query di-load khusus hari ini, kita bisa ambil yang pertama)
+            $todayAttendance = $student->attendances->first();
+
+            // Data default jika tidak ada kelas / belum ada generate absen hari ini
             $studentInfo = [
-                'name'             => $student->name,
-                'class_name'       => $class ? $class->name : 'Belum ada kelas',
-                'schedule_name'    => 'Tidak ada jadwal',
-                'attendance_status'=> 'Belum ada sesi',
+                'name'              => $student->name,
+                'class_name'        => $class ? $class->name : 'Belum ada kelas',
+                'schedule_name'     => 'Tidak ada jadwal',
+                'attendance_status' => 'Belum ada sesi',
             ];
 
-            // 3. Jika siswa punya kelas dan kelasnya punya jadwal
-            if ($class && $class->schedules->isNotEmpty()) {
-                $dayName = strtolower(Carbon::today()->format('l'));
-
-                $todaySchedule = $class->schedules->first(function ($schedule) use ($dayName) {
-                    $daysArray = array_map('trim', explode(',', $schedule->day ?? ''));
-                    return in_array($dayName, $daysArray);
-                });
-
-                if ($todaySchedule) {
-                    $studentInfo['schedule_name'] = $todaySchedule->name;
-                    $studentInfo['attendance_status'] = $this->resolveAttendanceStatus($student, $todaySchedule);
-                }
+            // 4. Jika record absensi hari ini ditemukan dan memiliki jadwal yang terikat
+            if ($todayAttendance && $todayAttendance->schedule) {
+                $schedule = $todayAttendance->schedule;
+                
+                $studentInfo['schedule_name']     = $schedule->name;
+                $studentInfo['attendance_status'] = $this->resolveAttendanceStatus($todayAttendance, $schedule);
             }
 
-            // 4. Masukkan data siswa ini ke dalam array utama
+            // 5. Masukkan data siswa ini ke dalam array utama
             $this->studentsData[] = $studentInfo;
         }
     }
 
-    private function resolveAttendanceStatus($student, $schedule): string
+    /**
+     * Resolving status menggunakan record attendance dan schedule yang di-passing.
+     */
+    private function resolveAttendanceStatus($attendance, $schedule): string
     {
-        $now       = Carbon::now();
-        $timeOpen  = Carbon::today()->setTimeFromTimeString($schedule->time_open);
+        $now      = Carbon::now();
+        $timeOpen = Carbon::today()->setTimeFromTimeString($schedule->time_open);
         
-        $attendance = $student->attendances()
-            ->whereDate('date', Carbon::today())
-            ->where('schedule_id', $schedule->id)
-            ->first();
-
-        if (!$attendance) {
-            return 'Belum ada sesi';
-        }
-
+        // Jika jadwalnya belum saatnya dibuka
         if ($now->lt($timeOpen)) {
             return 'Belum Dibuka';
         }
 
+        // Return status sesuai enum di database
         return match ($attendance->status) {
             'pending'    => 'Menunggu Absensi',
             'present'    => 'Hadir',

@@ -63,19 +63,21 @@
         </flux:table>
     @else
         {{-- Keterangan Ekstra (Hanya muncul jika SEMUA anak TIDAK ADA jadwal) --}}
-        <div class="p-3 flex justify-center items-center px-4">
+        <div class="p-4 flex justify-center items-center">
             <div
-                class="flex lg:w-full min-h-37.5 lg:min-h-[200px] flex-col items-center text-center bg-zinc-50 py-4 px-2 rounded-lg border border-zinc-200 gap-3">
+                class="flex w-full min-h-[200px] flex-col items-center justify-center text-center bg-zinc-50 py-6 px-4 rounded-xl border border-zinc-200 gap-3">
                 <x-heroicon-o-clipboard-document-check
-                    class="h-10 w-10 bg-zinc-100 rounded-full border border-zinc-200 p-2" />
+                 class="h-12 w-12 text-zinc-400 bg-white rounded-full border border-zinc-200 p-2.5 shadow-sm"/>
+                <div>
                 <p class="text-sm font-semibold text-zinc-900">
                     Belum Ada Absensi
                 </p>
-
-                <p class="text-sm text-zinc-600">
+                <p class="text-sm text-zinc-600 mt-1">
                     Data absensi akan tersedia setelah jadwal dimulai dan sesi absen telah dibuka.
                 </p>
-                <flux:button wire:navigate variant="primary" size="xs" class="md:px-5 md:py-2 md:text-sm">
+                </div>
+
+                <flux:button wire:navigate variant="primary" size="sm" class="mt-2">
                     Riwayat Absensi
                 </flux:button>
             </div>

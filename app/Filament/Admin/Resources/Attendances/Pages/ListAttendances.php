@@ -6,6 +6,7 @@ use App\Filament\Admin\Resources\Attendances\AttendanceResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListAttendances extends ListRecords
 {
@@ -22,7 +23,9 @@ class ListAttendances extends ListRecords
     {
         return [
             'all' => Tab::make('Semua'),
-            'today' => Tab::make('Hari Ini'),           
+            'today' => Tab::make('Hari Ini')->modifyQueryUsing(fn (Builder $query) =>
+                $query->whereToday('created_at')
+            ),         
         ];
     }
 }

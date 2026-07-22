@@ -21,7 +21,7 @@
         <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
         <flux:navlist variant="outline">
             <flux:navlist.item icon="home" href="/dashboard" wire:navigate>
-                Home
+                Dasbor
             </flux:navlist.item>
 
             <flux:spacer />
@@ -34,7 +34,7 @@
                 Riwayat Absensi
             </flux:navlist.item>
 
-            <flux:navlist.item icon="hand-raised" href="/izin" wire:navigate>
+            <flux:navlist.item icon="hand-raised" href="/leave-requests" wire:navigate>
                 Pengajuan Izin
             </flux:navlist.item>
             <flux:navlist.item icon="user-group" href="/izin" wire:navigate>
@@ -87,6 +87,7 @@
 
     @livewireScripts
     @fluxScripts
+        <flux:toast position="top end" />
 </body>
 
 </html>

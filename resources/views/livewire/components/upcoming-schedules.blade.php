@@ -12,13 +12,13 @@
         {{-- Empty State Content --}}
         <div class="p-4 flex justify-center items-center">
             <div class="flex w-full min-h-[200px] flex-col items-center justify-center text-center bg-zinc-50 py-6 px-4 rounded-xl border border-zinc-200 gap-3">
-                <x-heroicon-o-calendar-date-range class="h-12 w-12 text-zinc-400 bg-white rounded-full border border-zinc-200 p-2.5 shadow-sm" />
+                <x-heroicon-o-calendar-date-range class="h-12 w-12 text-zinc-400 bg-white rounded-full border border-zinc-200 p-2.5 shadow-sm"/>
                 <div>
                     <p class="text-sm font-semibold text-zinc-900">Tidak Ada Jadwal</p>
-                    <p class="text-sm text-zinc-500 mt-1">Silakan kembali besok atau cek menu <span class="font-medium text-zinc-700">Jadwal</span>.</p>
+                    <p class="text-sm text-zinc-500 mt-1">Silakan kembali besok atau cek menu jadwal anak untuk melihat jadwal lengkap.</p>
                 </div>
-                <flux:button wire:navigate variant="primary" size="sm" class="mt-2">
-                    Halaman Jadwal
+                <flux:button wire:navigate href="/students-schedules" variant="primary" size="sm" class="mt-2">
+                    Jadwal Anak
                 </flux:button>
             </div>
         </div>

@@ -1,10 +1,15 @@
-<!-- 1. Pindahkan x-data kembali ke parent -->
-<!-- 2. TAMBAHKAN 'items-start' DI SINI agar card tidak saling tarik ketinggian -->
-<div x-data="{ activeAccordion: null }" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
+
+<div x-data="{ 
+        activeAccordion: null,
+        isDesktop: window.matchMedia('(min-width: 768px)').matches 
+    }" 
+    @resize.window="isDesktop = window.matchMedia('(min-width: 768px)').matches"
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    
     @forelse($schedulesData as $schedule)
 
         <!-- 3. WAJIB ada wire:key agar state Alpine tidak bocor/tertukar oleh Livewire -->
-        <flux:card wire:key="schedule-{{ $schedule['id'] }}" class="flex flex-col gap-4 transition-all duration-300">
+        <flux:card wire:key="schedule-{{ $schedule['id'] }}" class="flex flex-col gap-4 h-full transition-all duration-300">
 
             <!-- Header Group -->
             <div class="flex justify-between items-start gap-4">
@@ -24,8 +29,9 @@
                     </div>
                 </div>
 
-                <!-- Tombol Toggle Kalender Akordion (Kembali pakai activeAccordion) -->
-                <flux:button variant="subtle" size="sm" class="shrink-0"
+                <!-- Tombol Toggle Kalender Akordion -->
+                <!-- PERUBAHAN: Tambahkan class 'md:hidden' agar tombol ini HILANG di mode desktop -->
+                <flux:button variant="subtle" size="sm" class="shrink-0 md:hidden"
                     x-on:click="activeAccordion = activeAccordion === {{ $schedule['id'] }} ? null : {{ $schedule['id'] }}">
                     <div class="flex items-center gap-2">
                         <flux:icon.calendar class="w-4 h-4" />
@@ -52,7 +58,9 @@
             </div>
 
             <!-- Body: Grid Kalender -->
-            <div x-show="activeAccordion === {{ $schedule['id'] }}" x-collapse x-cloak>
+            <!-- PERUBAHAN: Ubah kondisi x-show agar selalu TAMPIL jika isDesktop = true -->
+<!-- Body: Grid Kalender -->
+            <div x-show="isDesktop || activeAccordion === {{ $schedule['id'] }}" x-collapse x-cloak>
                 <div class="border-t border-zinc-100 dark:border-zinc-800 pt-3 mt-1">
 
                     <div class="grid grid-cols-7 text-center mb-1">
@@ -84,6 +92,19 @@
                                 <div></div>
                             @endif
                         @endforeach
+                    </div>
+                    
+                    <!-- PERUBAHAN: Keterangan Warna / Legend -->
+                    <div class="mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800 flex flex-col gap-2">
+                        <!-- Dijadwalkan -->
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-[4px] bg-blue-100 dark:bg-blue-500/20 flex-shrink-0"></div>
+                            <span class="text-xs text-zinc-500 dark:text-zinc-400">Dijadwalkan</span>
+                        </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-[4px] bg-red-100 dark:bg-red-500/20 flex-shrink-0 "></div>
+                                <span class="text-xs text-zinc-500 dark:text-zinc-400 leading-tight">Libur</span>
+                            </div>
                     </div>
 
                 </div>
