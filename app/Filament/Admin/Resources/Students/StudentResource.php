@@ -7,6 +7,7 @@ use App\Filament\Admin\Resources\Students\Pages\EditStudent;
 use App\Filament\Admin\Resources\Students\Pages\ListStudents;
 use App\Filament\Admin\Resources\Students\Pages\ViewStudent;
 use App\Filament\Admin\Resources\Students\Schemas\StudentForm;
+use App\Filament\Admin\Resources\Students\Schemas\StudentInfolist;
 use App\Filament\Admin\Resources\Students\Tables\StudentsTable;
 use App\Models\Student;
 use BackedEnum;
@@ -14,7 +15,6 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use StudentInfolist;
 use UnitEnum;
 
 class StudentResource extends Resource
@@ -25,7 +25,7 @@ class StudentResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Murid';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Administrasi';
+    protected static string|UnitEnum|null $navigationGroup = 'Master Data';
 
     public static function form(Schema $schema): Schema
     {

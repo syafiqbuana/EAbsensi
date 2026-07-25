@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Filament\Admin\Resources\Students\Schemas;
+
 use App\Models\Student;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;

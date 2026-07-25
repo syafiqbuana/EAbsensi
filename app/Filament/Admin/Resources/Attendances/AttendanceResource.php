@@ -19,7 +19,7 @@ class AttendanceResource extends Resource
 {
     protected static ?string $model = Attendance::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Administrasi';
+    protected static string|UnitEnum|null $navigationGroup = 'Kehadiran';
 
     protected static ?string $pluralModelLabel = 'Absensi';
 

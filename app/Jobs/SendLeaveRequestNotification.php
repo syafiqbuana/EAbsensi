@@ -46,7 +46,7 @@ class SendLeaveRequestNotification implements ShouldQueue
         $message .= "Keterangan: {$type}\n";
         $message .= "Alasan: {$reason}\n\n";
         $message .= "Silakan login ke panel admin untuk menyetujui atau menolak pengajuan ini.";
-       $adminNumber = config('services.fonnte.admin_whatsapp');
+        $adminNumber = config('services.fonnte.admin_whatsapp');
 
         if ($adminNumber) {
             $fonnteService->sendMessage($adminNumber, $message);

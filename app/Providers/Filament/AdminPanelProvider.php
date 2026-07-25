@@ -26,17 +26,24 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('admin')
             ->path('admin')
+            ->spa()
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->login(Login::class)
             ->colors([
                 'primary' => Color::Indigo,
             ])
             //set navigation icon
-           
+
             ->navigationGroups([
                 NavigationGroup::make()
-                ->label('Administrasi')
-                ->icon('heroicon-o-document-text')
+                    ->label('Kehadiran')
+                    ->icon('heroicon-o-check-badge')
+                ,
+                NavigationGroup::make()
+                    ->label('Master Data')->icon('heroicon-o-circle-stack')
+                ,
+                NavigationGroup::make()
+                    ->label('Administrasi')->icon('heroicon-o-document-text')
                 ,
             ])
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')

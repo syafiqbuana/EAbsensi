@@ -12,7 +12,9 @@ class LeaveRequest extends Model
 
     protected $fillable = [
         'student_id',
-        'approved_by', // Ditambahkan ke fillable
+        'approved_by', 
+        'created_by',
+        'rejected_reason',// Ditambahkan ke fillable
         'date',
         'type',
         'description',
@@ -33,6 +35,10 @@ class LeaveRequest extends Model
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function creator() {
+        return $this->belongsTo(User::class,'created_by');
     }
 
     /**

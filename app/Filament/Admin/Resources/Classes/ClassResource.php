@@ -19,7 +19,7 @@ class ClassResource extends Resource
 {
     protected static ?string $model = Classes::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Administrasi';
+    protected static string|UnitEnum|null $navigationGroup = 'Master Data';
 
     protected static ?string $pluralModelLabel = 'Kelas';
 

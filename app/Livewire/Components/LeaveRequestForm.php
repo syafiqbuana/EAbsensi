@@ -38,10 +38,8 @@ class LeaveRequestForm extends Component
         })->get();
     }
 
-    public function save()
+public function save()
     {
-        // Validasi akan otomatis menghentikan eksekusi jika gagal
-        // dan mengembalikan pesan error ke tampilan Blade
         $this->validate();
 
         try {
@@ -54,28 +52,26 @@ class LeaveRequestForm extends Component
                 'description' => $this->description,
                 'proof' => $proofPath,
                 'status' => 'pending',
+                'created_by' =>auth()->id()
             ]);
 
             SendLeaveRequestNotification::dispatch($leaveRequest);
 
-            // Toast Sukses
-            Flux::toast(
-                text: 'Permohonan izin Anda sedang menunggu persetujuan admin.',
-                heading: 'Berhasil Terkirim!',
-                variant: 'success',
-            );
+            // SKENARIO SUKSES: Karena ada redirect, kita titipkan pesan ke Session
+            session()->flash('toast_heading', 'Berhasil Terkirim!');
+            session()->flash('toast_text', 'Permohonan izin Anda sedang menunggu persetujuan admin.');
+            session()->flash('toast_variant', 'success');
 
             $this->redirect(route('leaveRequest'), navigate: true);
 
         } catch (\Exception $e) {
-            // Mencatat error ke file log Laravel (opsional tapi sangat disarankan)
             \Illuminate\Support\Facades\Log::error('Gagal menyimpan permohonan izin: ' . $e->getMessage());
 
-            // Toast Error menggunakan Flux
+            // SKENARIO GAGAL: Karena TIDAK ADA redirect, Flux::toast bisa dipanggil langsung
             Flux::toast(
                 text: 'Terjadi kesalahan sistem saat mengirim permohonan. Silakan coba lagi nanti.',
                 heading: 'Gagal Terkirim!',
-                variant: 'danger', // Flux umumnya menggunakan 'danger' atau 'error' untuk peringatan
+                variant: 'danger',
             );
         }
     }

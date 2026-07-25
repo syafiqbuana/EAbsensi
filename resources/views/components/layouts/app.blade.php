@@ -87,7 +87,23 @@
 
     @livewireScripts
     @fluxScripts
-        <flux:toast position="top end" />
+    <flux:toast position="top end" class="w-[90vw] sm:w-[400px] max-h-[80px]" />
+
+    <!-- Script penangkap session untuk Toast setelah Redirect -->
+    @if (session()->has('toast_text'))
+        <script>
+            document.addEventListener('livewire:navigated', () => {
+                Flux.toast({
+                    heading: "{{ session('toast_heading') }}",
+                    text: "{{ session('toast_text') }}",
+                    variant: "{{ session('toast_variant', 'success') }}",
+                    duration: 3000,
+                });
+            }, {
+                once: true
+            });
+        </script>
+    @endif
 </body>
 
 </html>

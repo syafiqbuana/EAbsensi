@@ -30,6 +30,7 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'phone_number',
         'is_active',
         'address',
     ];
@@ -128,6 +129,10 @@ class User extends Authenticatable implements FilamentUser
     public function students()
     {
         return $this->belongsToMany(Student::class, 'student_user');
+    }
+
+    public function createdBy() {
+        return $this->hasMany(LeaveRequest::class,'created_by');
     }
 
     public function studyRecords()

@@ -14,9 +14,9 @@ class LeaveRequestList extends Component
             ->whereHas('student.users', function ($query) {
                 $query->where('user_id', auth()->id());
             })
-            ->latest()
+            ->latest()->take(3)
             ->get();
-
+            
         return view('livewire.components.leave-request-list', [
             'leaveRequests' => $leaveRequests
         ]);
