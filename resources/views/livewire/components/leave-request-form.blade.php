@@ -3,17 +3,18 @@
     <form wire:submit="save">
         <flux:card class="flex flex-col gap-6">
 
-            <flux:field>
-                <flux:label>Pilih Murid</flux:label>
-                <flux:select wire:model="student_id" placeholder="Pilih nama anak...">
-                    @foreach ($students as $student)
-                        <flux:select.option value="{{ $student->id }}">{{ $student->name }}</flux:select.option>
-                    @endforeach
-                </flux:select>
-                <flux:error name="student_id" />
-            </flux:field>
+
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <flux:field>
+                    <flux:label>Pilih Murid</flux:label>
+                    <flux:select wire:model="student_id" placeholder="Pilih nama anak...">
+                        @foreach ($students as $student)
+                            <flux:select.option value="{{ $student->id }}">{{ $student->name }}</flux:select.option>
+                        @endforeach
+                    </flux:select>
+                    <flux:error name="student_id" />
+                </flux:field>
                 <flux:field>
                     <flux:label>Tipe Pengajuan</flux:label>
                     <flux:select wire:model="type" placeholder="Pilih jenis..." class="text-black">
@@ -24,9 +25,16 @@
                 </flux:field>
 
                 <flux:field>
-                    <flux:label>Tanggal Ketidakhadiran</flux:label>
-                    <flux:input type="date" wire:model="date"   min="{{ now()->toDateString() }}"/>
-                    <flux:error name="date" />
+                    <flux:label>Tanggal Mulai</flux:label>
+                    <flux:input type="date" wire:model="start_date" min="{{ now()->toDateString() }}" />
+                    <flux:error name="start_date" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Tanggal Selesai</flux:label>
+                    <flux:input type="date" wire:model="end_date" min="{{ now()->toDateString() }}" />
+                    <flux:text class="text-xs mt-2">Masukkan tanggal yang sama jika pengajuan hanya 1 hari</flux:text>
+                    <flux:error name="end_date" />
                 </flux:field>
             </div>
 

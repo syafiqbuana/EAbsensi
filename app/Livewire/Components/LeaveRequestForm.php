@@ -8,7 +8,7 @@ use Livewire\Attributes\Validate;
 use App\Models\LeaveRequest;
 use App\Models\Student;
 use App\Jobs\SendLeaveRequestNotification;
-use Flux\Flux; // Tambahkan facade Flux di sini
+use Flux\Flux;
 
 class LeaveRequestForm extends Component
 {
@@ -18,7 +18,10 @@ class LeaveRequestForm extends Component
     public $student_id = '';
 
     #[Validate('required|date|after_or_equal:today')]
-    public $date = '';
+    public $start_date = '';
+
+    #[Validate('required|date|after_or_equal:start_date')]
+    public $end_date = '';
 
     #[Validate('required|in:permission,sick')]
     public $type = '';
@@ -38,26 +41,28 @@ class LeaveRequestForm extends Component
         })->get();
     }
 
-public function save()
+    public function save()
     {
         $this->validate();
 
         try {
             $proofPath = $this->proof ? $this->proof->store('proofs', 'public') : null;
 
+            // Kita TIDAK memasukkan 'total_days'. 
+            // Model LeaveRequest akan otomatis menghitungnya di event 'creating'
             $leaveRequest = LeaveRequest::create([
-                'student_id' => $this->student_id,
-                'date' => $this->date,
-                'type' => $this->type,
+                'student_id'  => $this->student_id,
+                'start_date'  => $this->start_date,
+                'end_date'    => $this->end_date,
+                'type'        => $this->type,
                 'description' => $this->description,
-                'proof' => $proofPath,
-                'status' => 'pending',
-                'created_by' =>auth()->id()
+                'proof'       => $proofPath,
+                'status'      => 'pending',
+                'created_by'  => auth()->id()
             ]);
 
-            SendLeaveRequestNotification::dispatch($leaveRequest);
+            // SendLeaveRequestNotification::dispatch($leaveRequest);
 
-            // SKENARIO SUKSES: Karena ada redirect, kita titipkan pesan ke Session
             session()->flash('toast_heading', 'Berhasil Terkirim!');
             session()->flash('toast_text', 'Permohonan izin Anda sedang menunggu persetujuan admin.');
             session()->flash('toast_variant', 'success');
@@ -67,7 +72,6 @@ public function save()
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Gagal menyimpan permohonan izin: ' . $e->getMessage());
 
-            // SKENARIO GAGAL: Karena TIDAK ADA redirect, Flux::toast bisa dipanggil langsung
             Flux::toast(
                 text: 'Terjadi kesalahan sistem saat mengirim permohonan. Silakan coba lagi nanti.',
                 heading: 'Gagal Terkirim!',
@@ -79,14 +83,13 @@ public function save()
     public function messages()
     {
         return [
-            'student_id.required' => 'Silakan pilih nama siswa.',
-            'date.required' => 'Tanggal izin wajib diisi.',
-            'date.after_or_equal' => 'Tanggal tidak boleh di masa lalu.',
-            'type.required' => 'Silakan pilih jenis izin (Sakit/Izin).',
-            'description.required' => 'Alasan izin harus dijelaskan.',
-            'description.max' => 'Penjelasan terlalu panjang (maksimal 500 karakter).',
-            'proof.image' => 'Bukti harus berupa gambar (JPG, PNG).',
-            'proof.max' => 'Ukuran gambar maksimal 2MB.',
+            'student_id.required'       => 'Silakan pilih nama siswa.',
+            'start_date.required'       => 'Tanggal mulai izin wajib diisi.',
+            'start_date.after_or_equal' => 'Tanggal mulai tidak boleh di masa lalu.',
+            'end_date.required'         => 'Tanggal akhir izin wajib diisi.',
+            'end_date.after_or_equal'   => 'Tanggal akhir tidak boleh kurang dari tanggal mulai.',
+            'type.required'             => 'Silakan pilih jenis izin (Sakit/Izin).',
+            'description.required'      => 'Alasan izin harus dijelaskan.',
         ];
     }
 
