@@ -76,7 +76,7 @@ class CreateSchedule extends CreateRecord
         $todayName = strtolower(now()->format('l'));
 
         if ($this->record->day === $todayName) {
-            Artisan::call('attendance:generate');
+            Artisan::call('attendance:generate-sessions');
         }
     }
 }

@@ -12,11 +12,13 @@ class LeaveRequest extends Model
 {
     use HasFactory;
 
+    public const STATUS_APPROVED = 'approved';
+
     protected $fillable = [
         'student_id',
         'approved_by',
         'created_by',
-        'rejected_reason',// Ditambahkan ke fillable
+        'rejected_reason', // Ditambahkan ke fillable
         'start_date',
         'end_date',
         'total_days',
@@ -31,25 +33,25 @@ class LeaveRequest extends Model
         return [
             'start_date' => 'date',
             'end_date' => 'date',
-            'total_days' => 'integer'
+            'total_days' => 'integer',
         ];
     }
 
     public static function booted()
     {
         static::creating(function ($leaveRequest) {
-                        $leaveRequest->total_days = self::calculateTotalDays(
-                            $leaveRequest->student_id,
-                            $leaveRequest->start_date,
-                            $leaveRequest->end_date
-                        );
-            });
+            $leaveRequest->total_days = self::calculateTotalDays(
+                $leaveRequest->student_id,
+                $leaveRequest->start_date,
+                $leaveRequest->end_date
+            );
+        });
     }
 
     public static function calculateTotalDays($studentId, $start_date, $end_date)
     {
         $student = Student::with('classes.schedules')->find($studentId);
-        if (!$student?->classes?->schedules->isNotEmpty()) {
+        if (! $student?->classes?->schedules->isNotEmpty()) {
             return 0;
         }
 
@@ -74,7 +76,7 @@ class LeaveRequest extends Model
             $dateString = $date->format('Y-m-d');
 
             // EARLY EXIT: Lewati jika BUKAN hari masuk sekolah ATAU merupakan hari libur
-            if (!in_array($dayOfWeek, $activeDays) || isset($holidayDates[$dateString])) {
+            if (! in_array($dayOfWeek, $activeDays) || isset($holidayDates[$dateString])) {
                 continue;
             }
 
@@ -98,8 +100,8 @@ class LeaveRequest extends Model
         ];
 
         // Gunakan fungsi Collection Laravel agar rapi dan tanpa loop bersarang
-        return $schedules->flatMap(fn($schedule) => explode(',', $schedule->day))
-            ->map(fn($day) => $dayMap[$day] ?? null)
+        return $schedules->flatMap(fn ($schedule) => explode(',', $schedule->day))
+            ->map(fn ($day) => $dayMap[$day] ?? null)
             ->filter() // Membuang nilai null jika ada
             ->unique()
             ->toArray();
@@ -123,7 +125,8 @@ class LeaveRequest extends Model
             }
 
             $holidayScheduleIds = $holiday->schedules->pluck('id')->toArray();
-            return !empty(array_intersect($scheduleIds, $holidayScheduleIds));
+
+            return ! empty(array_intersect($scheduleIds, $holidayScheduleIds));
         });
 
         // Mapping libur yang valid menjadi array lookup (Key-Value)
@@ -156,7 +159,7 @@ class LeaveRequest extends Model
      */
     public function approver(): BelongsTo
     {
-        // Parameter kedua ('approved_by') perlu ditulis eksplisit 
+        // Parameter kedua ('approved_by') perlu ditulis eksplisit
         // karena nama method (approver) berbeda dengan nama kolom (approved_by)
         return $this->belongsTo(User::class, 'approved_by');
     }

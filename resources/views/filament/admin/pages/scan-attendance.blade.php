@@ -35,11 +35,14 @@
                     onScanSuccess(decodedText, decodedResult) {
                         this.scanner.pause(true);
 
-                        $wire.processQrScan(decodedText).then(() => {
-                            setTimeout(() => {
-                                this.scanner.resume();
-                            }, 2000);
-                        });
+                        this.$wire.processQrScan(decodedText)
+                            .then(() => {
+                                setTimeout(() => this.scanner.resume(), 2000);
+                            })
+                            .catch(() => {
+                                console.error('Gagal memproses scan absensi.');
+                                setTimeout(() => this.scanner.resume(), 2000);
+                            });
                     },
 
                     onScanError(error) {
