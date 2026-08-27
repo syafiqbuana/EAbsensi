@@ -29,26 +29,35 @@ class AttendanceMarkAbsent extends Command
      */
 public function handle()
 {
-    $now = Carbon::now(); // pastikan timezone app = Asia/Jakarta di config/app.php
+    $now = Carbon::now();
     $dayName = strtolower($now->format('l'));
     $currentTime = $now->format('H:i:s');
 
-    // Cari semua jadwal hari ini yang sudah melewati time_close (tanpa batasan window)
+    // 1. Tanggal LAMPAU: semua pending otomatis jadi absent
+    //    (tidak perlu cek time_close karena harinya sudah lewat)
+    $pastUpdated = Attendance::where('status', 'pending')
+        ->where('date', '<', $now->toDateString())
+        ->update(['status' => 'absent']);
+
+    // 2. Hari INI: hanya yang jadwalnya sudah lewat time_close
     $scheduleIds = Schedules::where('time_close', '<=', $currentTime)
         ->whereRaw("FIND_IN_SET(?, day)", [$dayName])
         ->pluck('id');
 
-    if ($scheduleIds->isEmpty()) {
-        $this->info("Belum ada jadwal yang melewati time_close saat ini.");
-        return self::SUCCESS;
+    $todayUpdated = 0;
+    if ($scheduleIds->isNotEmpty()) {
+        $todayUpdated = Attendance::whereIn('schedule_id', $scheduleIds)
+            ->where('date', $now->toDateString())
+            ->where('status', 'pending')
+            ->update(['status' => 'absent']);
     }
 
-    $updatedCount = Attendance::whereIn('schedule_id', $scheduleIds)
-        ->where('date', $now->toDateString())
-        ->where('status', 'pending')
-        ->update(['status' => 'absent']);
+    $total = $pastUpdated + $todayUpdated;
 
-    $this->info("Berhasil mengubah {$updatedCount} status pending menjadi alfa.");
+    $this->info("Berhasil mengubah {$total} status pending menjadi alfa.");
+    $this->info("  └─ Tanggal lampau : {$pastUpdated}");
+    $this->info("  └─ Hari ini        : {$todayUpdated}");
+
     return self::SUCCESS;
 }
 }

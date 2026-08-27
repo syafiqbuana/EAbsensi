@@ -22,7 +22,7 @@ class StudentResource extends Resource
     protected static ?string $model = Student::class;
 
     protected static ?int $navigationSort = 3;
-
+    protected static ?string $slug = 'murid';
     protected static ?string $pluralModelLabel = 'Murid';
 
     protected static string|UnitEnum|null $navigationGroup = 'Master Data';

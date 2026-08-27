@@ -24,6 +24,8 @@ class LeaveRequestResource extends Resource
     protected static string|UnitEnum|null $navigationGroup = 'Kehadiran';
 
     protected static ?string $pluralModelLabel = 'Pengajuan Izin';
+
+    protected static ?string $slug = 'pengajuan-izin';
     
     public static function form(Schema $schema): Schema
     {

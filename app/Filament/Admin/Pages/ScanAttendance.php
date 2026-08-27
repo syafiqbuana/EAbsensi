@@ -14,6 +14,8 @@ class ScanAttendance extends Page
 
     protected static ?string $navigationLabel = 'Scan Absensi';
 
+    protected static ?string $slug = 'scan-absensi';
+
     protected static ?string $title = 'Scan Absensi';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::QrCode;

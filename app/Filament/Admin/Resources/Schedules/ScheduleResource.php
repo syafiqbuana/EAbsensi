@@ -19,6 +19,7 @@ class ScheduleResource extends Resource
     protected static ?string $model = Schedules::class;
     protected static ?string $pluralModelLabel = 'Jadwal';
     protected static ?int $navigationSort = 2;   
+    protected static ?string $slug = 'jadwal';
     protected static string|UnitEnum|null $navigationGroup = 'Master Data';
 
     public static function form(Schema $schema): Schema

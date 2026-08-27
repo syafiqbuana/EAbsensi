@@ -1,12 +1,17 @@
 <x-filament-panels::page>
-    <div x-data="qrScanner()" x-init="initScanner" class="flex flex-col items-center w-full">
-        {{-- Pembungkus Kamera --}}
-        <div class="w-full max-w-lg p-4 bg-white rounded-xl shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10"
-            wire:ignore>
+    <div x-data="qrScanner()" x-init="initScanner" class="flex w-full flex-col items-center">
+
+        {{-- CAMERA --}}
+        <div wire:ignore
+            class="w-full max-w-[700px] overflow-hidden rounded-xl bg-black shadow-sm ring-1 ring-gray-950/5 dark:ring-white/10">
             <div id="reader" class="w-full"></div>
         </div>
 
-        {{-- GANTI CDN DENGAN VITE DI SINI --}}
+        {{-- CONTROL --}}
+        <div id="scanner-controls"
+            class="mt-4 flex w-full max-w-[700px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
+        </div>
+
         @vite('resources/js/app.js')
 
         <script>
@@ -16,20 +21,37 @@
 
                     initScanner() {
                         setTimeout(() => {
-
                             this.scanner = new window.Html5QrcodeScanner(
                                 "reader", {
                                     fps: 10,
                                     aspectRatio: 1.0,
                                     supportedScanTypes: [0],
-                                    showTorchButtonIfSupported: true, // <-- Tambahkan ini
+                                    showTorchButtonIfSupported: true,
                                 },
                                 false
                             );
 
-                            this.scanner.render(this.onScanSuccess.bind(this), this.onScanError
-                                .bind(this));
+                            this.scanner.render(
+                                this.onScanSuccess.bind(this),
+                                this.onScanError.bind(this)
+                            );
+
+                            this.moveControls();
                         }, 500);
+                    },
+
+                    moveControls() {
+                        const controls = document.querySelector(
+                            '#reader__dashboard_section_csr'
+                        );
+
+                        const target = document.querySelector(
+                            '#scanner-controls'
+                        );
+
+                        if (controls && target) {
+                            target.appendChild(controls);
+                        }
                     },
 
                     onScanSuccess(decodedText, decodedResult) {
@@ -37,110 +59,127 @@
 
                         this.$wire.processQrScan(decodedText)
                             .then(() => {
-                                setTimeout(() => this.scanner.resume(), 2000);
+                                setTimeout(() => {
+                                    this.scanner.resume();
+                                }, 2000);
                             })
                             .catch(() => {
-                                console.error('Gagal memproses scan absensi.');
-                                setTimeout(() => this.scanner.resume(), 2000);
+                                console.error(
+                                    'Gagal memproses scan absensi.'
+                                );
+
+                                setTimeout(() => {
+                                    this.scanner.resume();
+                                }, 2000);
                             });
                     },
 
                     onScanError(error) {
-                        // Abaikan
+                        // Abaikan error scanning
                     }
                 }))
             })
         </script>
 
-<style>
-    /* 1. HAPUS BORDER & PASTIKAN CONTAINER FULL WIDTH */
-    #reader {
-        border: none !important;
-        background: transparent !important;
-        width: 100% !important;
-    }
+        <style>
+            /* =========================
+               CAMERA
+            ========================= */
+            #reader {
+                width: min(100%,
+                        65vh,
+                        650px) !important;
 
-    /* HILANGKAN GAMBAR/ICON BAWAAN LIBRARY */
-    #reader img {
-        display: none !important;
-    }
+                aspect-ratio: 1 / 1 !important;
 
-    /* 2. RESPONSIVE CONTAINER UNTUK KONTROL (FLEXBOX) */
-    #reader__dashboard_section_csr {
-        display: flex !important;
-        flex-direction: column !important; /* Tumpuk ke bawah di HP */
-        gap: 10px !important; /* Jarak antar elemen */
-        padding: 10px 0 !important;
-        text-align: center !important;
-    }
+                border: none !important;
+                background: #000 !important;
+                margin: 0 auto !important;
+            }
 
-    /* 3. PERBAIKI DROPDOWN SELECT CAMERA */
-    #reader__dashboard_section_csr select {
-        padding: 0.75rem 1rem !important; /* Padding sedikit lebih besar untuk sentuhan jari */
-        border-radius: 0.5rem !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        background-color: #18181b !important;
-        color: #ffffff !important;
-        width: 100% !important; /* Full width di HP */
-        outline: none !important;
-        font-size: 0.95rem !important;
-        cursor: pointer !important;
-        margin: 0 !important;
-    }
+            #reader video {
+                width: 100% !important;
+                height: 100% !important;
+                display: block !important;
+                object-fit: cover !important;
+            }
 
-    #reader__dashboard_section_csr select option {
-        background-color: #18181b !important;
-        color: #ffffff !important;
-    }
+            #reader img,
+            #reader a {
+                display: none !important;
+            }
 
-    /* 4. PERCANTIK TOMBOL START / STOP SCANNING */
-    #reader__dashboard_section_csr button {
-        background-color: rgb(217, 119, 6) !important; /* Warna Amber Filament */
-        color: white !important;
-        padding: 0.75rem 1.5rem !important;
-        border-radius: 0.5rem !important;
-        border: none !important;
-        font-weight: 600 !important;
-        cursor: pointer !important;
-        width: 100% !important; /* Full width di HP */
-        margin: 0 !important;
-        transition: background-color 0.2s ease-in-out !important;
-    }
 
-    #reader__dashboard_section_csr button:hover {
-        background-color: rgb(180, 83, 9) !important;
-    }
+            /* =========================
+               HIDE ORIGINAL DASHBOARD
+               FROM CAMERA
+            ========================= */
 
-    /* 5. PASTIKAN VIDEO KAMERA TIDAK PENYOK */
-    #reader video {
-        width: 100% !important;
-        height: auto !important;
-        border-radius: 0.5rem !important; /* Sudut membulat agar rapi */
-        object-fit: cover !important; 
-    }
+            #reader__dashboard_section_csr {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 10px !important;
+                width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            #reader__dashboard_section_csr select {
+                width: 100% !important;
+                padding: 0.7rem 1rem !important;
 
-    /* Sembunyikan elemen link / text yang tidak perlu */
-    #reader a {
-        display: none !important;
-    }
+                border-radius: 0.5rem !important;
+                border: 1px solid rgb(63 63 70) !important;
 
-    /* 6. MEDIA QUERY UNTUK TABLET & LAYAR LAPTOP (MIN-WIDTH: 640px) */
-    @media (min-width: 640px) {
-        #reader__dashboard_section_csr {
-            flex-direction: row !important; /* Sejajarkan ke samping jika muat */
-            justify-content: center !important;
-            align-items: center !important;
-        }
-        
-        #reader__dashboard_section_csr select {
-            width: auto !important; /* Kembalikan ke ukuran auto */
-            max-width: 350px !important;
-        }
-        
-        #reader__dashboard_section_csr button {
-            width: auto !important; /* Kembalikan ke ukuran auto */
-        }
-    }
-</style>
+                background-color: rgb(24 24 27) !important;
+                color: white !important;
+
+                outline: none !important;
+                font-size: 0.95rem !important;
+            }
+
+            #reader__dashboard_section_csr select option {
+                background-color: rgb(24 24 27) !important;
+                color: white !important;
+            }
+
+            #reader__dashboard_section_csr button {
+                width: 100% !important;
+
+                padding: 0.7rem 1.5rem !important;
+
+                border: none !important;
+                border-radius: 0.5rem !important;
+
+                background-color: rgb(217 119 6) !important;
+                color: white !important;
+
+                font-weight: 600 !important;
+                cursor: pointer !important;
+
+                transition: background-color 0.2s ease-in-out !important;
+            }
+
+            #reader__dashboard_section_csr button:hover {
+                background-color: rgb(180 83 9) !important;
+            }
+
+            @media (min-width: 640px) {
+
+                #reader__dashboard_section_csr {
+                    flex-direction: row !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                }
+
+                #reader__dashboard_section_csr select {
+                    width: 300px !important;
+                }
+
+                #reader__dashboard_section_csr button {
+                    width: auto !important;
+                }
+            }
+        </style>
+
     </div>
 </x-filament-panels::page>

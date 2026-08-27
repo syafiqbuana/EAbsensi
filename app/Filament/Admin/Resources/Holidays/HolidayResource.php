@@ -21,6 +21,8 @@ class HolidayResource extends Resource
 
     protected static ?string $pluralModelLabel ='Libur';
 
+    protected static ?string $slug = 'libur';
+
     protected static string|UnitEnum|null $navigationGroup = 'Kehadiran';
 
     public static function form(Schema $schema): Schema

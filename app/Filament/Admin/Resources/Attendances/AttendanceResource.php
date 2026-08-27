@@ -23,6 +23,8 @@ class AttendanceResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Absensi';
 
+    protected static ?string $slug = 'absensi';
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
