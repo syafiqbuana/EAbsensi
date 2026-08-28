@@ -18,6 +18,7 @@
             document.addEventListener('alpine:init', () => {
                 Alpine.data('qrScanner', () => ({
                     scanner: null,
+                    isProcessing: false,
 
                     initScanner() {
                         setTimeout(() => {
@@ -41,57 +42,39 @@
                     },
 
                     moveControls() {
-                        const controls = document.querySelector(
-                            '#reader__dashboard_section_csr'
-                        );
+                        const controls = document.querySelector('#reader__dashboard_section_csr');
+                        const target = document.querySelector('#scanner-controls');
+                        if (controls && target) target.appendChild(controls);
+                    },
 
-                        const target = document.querySelector(
-                            '#scanner-controls'
-                        );
+                    async onScanSuccess(decodedText) {
+                        if (this.isProcessing) return;
+                        this.isProcessing = true;
 
-                        if (controls && target) {
-                            target.appendChild(controls);
+                        try {
+                            await this.$wire.processQrScan(decodedText);
+                        } catch (e) {
+                            console.error('Gagal memproses scan absensi.');
+                        } finally {
+                            // Cooldown 2 detik sebelum bisa scan QR yang sama lagi
+                            // Kamera tidak pernah berhenti
+                            setTimeout(() => {
+                                this.isProcessing = false;
+                            }, 2000);
                         }
                     },
 
-                    onScanSuccess(decodedText, decodedResult) {
-                        this.scanner.pause(true);
-
-                        this.$wire.processQrScan(decodedText)
-                            .then(() => {
-                                setTimeout(() => {
-                                    this.scanner.resume();
-                                }, 2000);
-                            })
-                            .catch(() => {
-                                console.error(
-                                    'Gagal memproses scan absensi.'
-                                );
-
-                                setTimeout(() => {
-                                    this.scanner.resume();
-                                }, 2000);
-                            });
-                    },
-
-                    onScanError(error) {
-                        // Abaikan error scanning
+                    onScanError() {
+                        // Abaikan error scanning frame
                     }
                 }))
             })
         </script>
 
         <style>
-            /* =========================
-               CAMERA
-            ========================= */
             #reader {
-                width: min(100%,
-                        65vh,
-                        650px) !important;
-
+                width: min(100%, 65vh, 650px) !important;
                 aspect-ratio: 1 / 1 !important;
-
                 border: none !important;
                 background: #000 !important;
                 margin: 0 auto !important;
@@ -109,12 +92,6 @@
                 display: none !important;
             }
 
-
-            /* =========================
-               HIDE ORIGINAL DASHBOARD
-               FROM CAMERA
-            ========================= */
-
             #reader__dashboard_section_csr {
                 display: flex !important;
                 flex-direction: column !important;
@@ -123,16 +100,14 @@
                 padding: 0 !important;
                 margin: 0 !important;
             }
+
             #reader__dashboard_section_csr select {
                 width: 100% !important;
                 padding: 0.7rem 1rem !important;
-
                 border-radius: 0.5rem !important;
                 border: 1px solid rgb(63 63 70) !important;
-
                 background-color: rgb(24 24 27) !important;
                 color: white !important;
-
                 outline: none !important;
                 font-size: 0.95rem !important;
             }
@@ -144,18 +119,13 @@
 
             #reader__dashboard_section_csr button {
                 width: 100% !important;
-
                 padding: 0.7rem 1.5rem !important;
-
                 border: none !important;
                 border-radius: 0.5rem !important;
-
                 background-color: rgb(217 119 6) !important;
                 color: white !important;
-
                 font-weight: 600 !important;
                 cursor: pointer !important;
-
                 transition: background-color 0.2s ease-in-out !important;
             }
 
@@ -164,7 +134,6 @@
             }
 
             @media (min-width: 640px) {
-
                 #reader__dashboard_section_csr {
                     flex-direction: row !important;
                     align-items: center !important;
