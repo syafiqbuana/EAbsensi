@@ -22,7 +22,7 @@ class UserForm
                     ->email()
                     ->required()
                     ->maxLength(255),
-                TextArea::make('address')
+                Textarea::make('address')
                     ->label('Alamat')
                     ->required()
                     ->columnSpanFull(),
