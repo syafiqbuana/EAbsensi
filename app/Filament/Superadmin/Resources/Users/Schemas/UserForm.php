@@ -6,7 +6,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Spatie\Permission\Models\Role;
-use Filament\Forms\Components\TextArea;
+use Filament\Forms\Components\Textarea;
 
 class UserForm
 {
@@ -28,7 +28,7 @@ class UserForm
                     ->relationship('roles', 'name')
                     ->multiple()
                     ->preload(),
-                TextArea::make('address')
+                Textarea::make('address')
                     ->label('Alamat')
                     ->required(),
                 TextInput::make('password')
