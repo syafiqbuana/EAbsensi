@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Users\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextArea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -25,6 +26,12 @@ class UserForm
                     ->label('Alamat')
                     ->required()
                     ->columnSpanFull(),
+                Select::make('students')
+                    ->label('Murid')
+                    ->maxItems(5)
+                    ->relationship('students', 'name')
+                    ->multiple()
+                    ->preload(),
                 TextInput::make('password')
                     ->password()
                     ->required(fn(string $operation) => $operation === 'create')

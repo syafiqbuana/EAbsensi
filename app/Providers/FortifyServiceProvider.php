@@ -60,22 +60,16 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::authenticateUsing(function (Request $request){
             // Cari user berdasarkan email
             $user = User::where('email', $request->email)->first();
-
-            // Cek apakah user ada dan passwordnya cocok
             if ($user && Hash::check($request->password, $user->password)) {
                 
-                // 2. Cek apakah user ini punya role 'parent' di Spatie
-                if ($user->hasRole('parent')) {
+                if ($user->hasRole(User::PARENT_ROlE)) {
                     return $user; // Login sukses
                 }
-
                 // 3. Jika password benar tapi bukan parent, lemparkan error custom
                 throw ValidationException::withMessages([
                     'email' => 'Akun ini tidak memiliki hak akses sebagai Orang Tua/Wali.',
                 ]);
             }
-
-            // Jika email/password salah, kembalikan null agar Fortify menampilkan error bawaan
             return null;
         });
 

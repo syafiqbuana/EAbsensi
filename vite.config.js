@@ -19,7 +19,7 @@ export default defineConfig({
         host: '0.0.0.0',
         port: 5173,
         hmr: {
-            host: '192.168.18.6', // ganti dengan IP PC Anda
+            host: 'tpq.syafiqbuana.web.id', // ganti dengan IP PC Anda
         },
         watch: {
             ignored: ['**/storage/framework/views/**'],
