@@ -10,11 +10,13 @@ use App\Filament\Admin\Resources\Students\Schemas\StudentForm;
 use App\Filament\Admin\Resources\Students\Schemas\StudentInfolist;
 use App\Filament\Admin\Resources\Students\Tables\StudentsTable;
 use App\Models\Student;
+use App\Support\CurrentTpq;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class StudentResource extends Resource
@@ -44,6 +46,12 @@ class StudentResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('tpq_profile_id', CurrentTpq::id());
     }
 
     public static function getPages(): array

@@ -12,6 +12,7 @@ class Student extends Model
 {
     protected $fillable =
         [
+            'tpq_profile_id',
             'name',
             'class_id',
             'birth_date',

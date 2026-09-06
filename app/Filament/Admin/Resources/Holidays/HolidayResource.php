@@ -8,11 +8,13 @@ use App\Filament\Admin\Resources\Holidays\Pages\ListHolidays;
 use App\Filament\Admin\Resources\Holidays\Schemas\HolidayForm;
 use App\Filament\Admin\Resources\Holidays\Tables\HolidaysTable;
 use App\Models\Holiday;
+use App\Support\CurrentTpq;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class HolidayResource extends Resource
@@ -40,6 +42,12 @@ class HolidayResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('tpq_profile_id', CurrentTpq::id());
     }
 
     public static function getPages(): array

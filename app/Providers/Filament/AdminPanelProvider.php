@@ -3,6 +3,8 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Admin\Pages\Auth\Login;
+use App\Filament\Admin\Pages\Auth\Register;
+use App\Http\Middleware\ResolveTpqTenant;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -10,6 +12,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
+use App\Http\Middleware\AuthenticateFilamentAdmin;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -25,10 +28,12 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->id('admin')
-            ->path('admin')
+            ->path('{tpq_slug}/admin')    // parameter slug dinamis
+            ->brandName(fn () => \App\Support\CurrentTpq::get()?->name ?? config('app.name'))
             ->spa()
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->login(Login::class)
+            ->registration(Register::class)
             ->colors([
                 'primary' => Color::Indigo,
             ])
@@ -64,9 +69,10 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                ResolveTpqTenant::class,   // resolve tenant dari slug
             ])
             ->authMiddleware([
-                Authenticate::class,
+                 AuthenticateFilamentAdmin::class,
             ]);
     }
 }

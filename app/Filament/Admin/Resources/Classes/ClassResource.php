@@ -8,6 +8,7 @@ use App\Filament\Admin\Resources\Classes\Pages\ListClasses;
 use App\Filament\Admin\Resources\Classes\Schemas\ClassForm;
 use App\Filament\Admin\Resources\Classes\Tables\ClassesTable;
 use App\Models\Classes;
+use App\Support\CurrentTpq;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -45,6 +46,7 @@ class ClassResource extends Resource
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder {
         return parent::getEloquentQuery()
+            ->where('tpq_profile_id', CurrentTpq::id())
             ->orderBy('order','asc');
     }
 

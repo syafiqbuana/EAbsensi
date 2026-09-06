@@ -10,11 +10,13 @@ use App\Filament\Admin\Resources\LeaveRequests\Schemas\LeaveRequestForm;
 use App\Filament\Admin\Resources\LeaveRequests\Schemas\LeaveRequestInfolist;
 use App\Filament\Admin\Resources\LeaveRequests\Tables\LeaveRequestsTable;
 use App\Models\LeaveRequest;
+use App\Support\CurrentTpq;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class LeaveRequestResource extends Resource
@@ -46,6 +48,12 @@ class LeaveRequestResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('tpq_profile_id', CurrentTpq::id());
     }
 
     public static function getPages(): array

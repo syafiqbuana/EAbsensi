@@ -7,6 +7,7 @@ use App\Models\Holiday;
 use App\Models\LeaveRequest;
 use App\Models\Schedules;
 use App\Models\Student;
+use App\Support\CurrentTpq;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +19,7 @@ class AttendanceScanService
         $student = Student::query()
             ->with(['classes.schedules'])
             ->where('qr_token', $qrToken)
+            ->where('tpq_profile_id', CurrentTpq::id())
             ->first();
 
         if (! $student) {

@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Resources\Schedules\Pages;
 
 use App\Filament\Admin\Resources\Schedules\ScheduleResource;
 use App\Models\Schedules;
+use App\Support\CurrentTpq;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Artisan;
@@ -13,6 +14,13 @@ use Illuminate\Support\Facades\Log;
 class CreateSchedule extends CreateRecord
 {
     protected static string $resource = ScheduleResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['tpq_profile_id'] = CurrentTpq::id();
+
+        return $data;
+    }
 
     protected function beforeCreate(): void
     {
