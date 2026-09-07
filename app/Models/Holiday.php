@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Holiday extends Model
 {
-    protected $fillable =['name','start_date','end_date','description','is_global'];
+    protected $fillable = ['tpq_profile_id', 'name', 'start_date', 'end_date', 'description', 'is_global'];
 
     protected $casts = [
         'start_date' => 'date',

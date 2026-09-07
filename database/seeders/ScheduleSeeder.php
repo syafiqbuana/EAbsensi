@@ -13,7 +13,7 @@ class ScheduleSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run(\App\Models\TpqProfile $tpqProfile): void
     {
         $faker = Faker::create();
         $classes = Classes::all();
@@ -60,6 +60,7 @@ class ScheduleSeeder extends Seeder
 
             // 4. Buat Record Jadwal (Schedules)
             $schedule = Schedules::create([
+                'tpq_profile_id' => $tpqProfile->id,
                 'name' => 'Jadwal ' . ($blueprint['is_morning'] ? 'Pagi ' : 'Siang ') . ucfirst($faker->word),
                 'day' => implode(',', $blueprint['days']), // Format tipe data SET MySQL
                 'time_open' => $openTime->format('H:i:s'),

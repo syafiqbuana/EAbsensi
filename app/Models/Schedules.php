@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Schedules extends Model
 {
-    protected $fillable =['name','day','time_open','time_close'];
+    protected $fillable = ['tpq_profile_id', 'name', 'day', 'time_open', 'time_close'];
 
     public function classes()
     {

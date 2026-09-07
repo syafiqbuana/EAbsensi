@@ -6,15 +6,15 @@ use App\Models\Classes;
 
 class ClassesSeeder extends Seeder
 {
-    public function run(): void
+    public function run(\App\Models\TpqProfile $tpqProfile): void
     {
         Classes::insert([
-            ['name' => 'Kelas 1', 'order' => 1],
-            ['name' => 'Kelas 2', 'order' => 2],
-            ['name' => 'Kelas 3', 'order' => 3],
-            ['name' => 'Kelas 4', 'order' => 4],
-            ['name' => 'Kelas 5', 'order' => 5],
-            ['name' => 'Kelas 6', 'order' => 6],
+            ['tpq_profile_id' => $tpqProfile->id, 'name' => 'Kelas 1', 'order' => 1],
+            ['tpq_profile_id' => $tpqProfile->id, 'name' => 'Kelas 2', 'order' => 2],
+            ['tpq_profile_id' => $tpqProfile->id, 'name' => 'Kelas 3', 'order' => 3],
+            ['tpq_profile_id' => $tpqProfile->id, 'name' => 'Kelas 4', 'order' => 4],
+            ['tpq_profile_id' => $tpqProfile->id, 'name' => 'Kelas 5', 'order' => 5],
+            ['tpq_profile_id' => $tpqProfile->id, 'name' => 'Kelas 6', 'order' => 6],
         ]);
     }
 }

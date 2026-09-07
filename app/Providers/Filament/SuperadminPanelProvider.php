@@ -29,6 +29,7 @@ class SuperadminPanelProvider extends PanelProvider
             ->id('superadmin')
             ->path('superadmin')
             ->login(Login::class)
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
                 'primary' => Color::Lime,
             ])

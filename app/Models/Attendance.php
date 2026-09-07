@@ -18,7 +18,7 @@ class Attendance extends Model
 
     public const STATUS_HOLIDAY = 'holiday';
 
-    protected $fillable = ['student_id', 'schedule_id', 'date', 'time_in', 'status'];
+    protected $fillable = ['tpq_profile_id', 'student_id', 'schedule_id', 'date', 'time_in', 'status'];
 
     protected $casts = [
         'date' => 'date',

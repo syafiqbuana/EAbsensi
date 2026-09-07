@@ -25,14 +25,14 @@ class ListUsers extends ListRecords
         return [
             'parents' => Tab::make('Orang Tua')
                 ->badge(User::query()->whereHas('roles', function ($query) {
-                    $query->where('name', User::PARENT_ROlE);
+                    $query->where('name', User::PARENT_ROLE);
                 })->where('is_active', true)->count())
-                ->query(fn ($query) => $query->role(User::PARENT_ROlE)),
+                ->query(fn ($query) => $query->role(User::PARENT_ROLE)),
             'admins' => Tab::make('Admin')
                 ->badge(User::query()->whereHas('roles', function ($query) {
-                    $query->where('name', User::ADMIN_ROLE);
+                    $query->where('name', User::TEACHER_ROLE);
                 })->where('is_active', true)->count())
-                ->query(fn ($query) => $query->role(User::ADMIN_ROLE))
+                ->query(fn ($query) => $query->role(User::TEACHER_ROLE))
         ];
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Classes extends Model
 {
-    protected $fillable = ['name','order'];
+    protected $fillable = ['tpq_profile_id', 'name', 'order'];
 
     protected $casts = [
         'order' => 'integer',

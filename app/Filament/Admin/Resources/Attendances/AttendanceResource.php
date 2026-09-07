@@ -8,11 +8,13 @@ use App\Filament\Admin\Resources\Attendances\Pages\ListAttendances;
 use App\Filament\Admin\Resources\Attendances\Schemas\AttendanceForm;
 use App\Filament\Admin\Resources\Attendances\Tables\AttendancesTable;
 use App\Models\Attendance;
+use App\Support\CurrentTpq;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class AttendanceResource extends Resource
@@ -42,6 +44,12 @@ class AttendanceResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('tpq_profile_id', CurrentTpq::id());
     }
 
     public static function getPages(): array

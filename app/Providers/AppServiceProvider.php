@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\TpqProfile;
+use App\Observers\TpqProfileObserver;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,11 +22,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-            if (config('app.env') !== 'local') {
-        URL::forceScheme('https');
-    }
+        if (config('app.env') !== 'local') {
+            URL::forceScheme('https');
+        }
 
-    // atau kalau tetap mau force meski di local:
-    URL::forceRootUrl(config('app.url'));
+        // atau kalau tetap mau force meski di local:
+        URL::forceRootUrl(config('app.url'));
+
+        // Register observers
+        TpqProfile::observe(TpqProfileObserver::class);
     }
 }

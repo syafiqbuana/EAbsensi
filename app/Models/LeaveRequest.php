@@ -15,10 +15,11 @@ class LeaveRequest extends Model
     public const STATUS_APPROVED = 'approved';
 
     protected $fillable = [
+        'tpq_profile_id',
         'student_id',
         'approved_by',
         'created_by',
-        'rejected_reason', // Ditambahkan ke fillable
+        'rejected_reason',
         'start_date',
         'end_date',
         'total_days',

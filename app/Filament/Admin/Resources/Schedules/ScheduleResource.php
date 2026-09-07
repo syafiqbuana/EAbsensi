@@ -8,10 +8,12 @@ use App\Filament\Admin\Resources\Schedules\Pages\ListSchedules;
 use App\Filament\Admin\Resources\Schedules\Schemas\ScheduleForm;
 use App\Filament\Admin\Resources\Schedules\Tables\SchedulesTable;
 use App\Models\Schedules;
+use App\Support\CurrentTpq;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class ScheduleResource extends Resource
@@ -37,6 +39,12 @@ class ScheduleResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('tpq_profile_id', CurrentTpq::id());
     }
 
     public static function getPages(): array

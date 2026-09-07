@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class StudyRecord extends Model
 {
     protected $fillable = [
+        'tpq_profile_id',
         'student_id',
         'class_id',
         'study_date',

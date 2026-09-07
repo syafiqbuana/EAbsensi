@@ -9,6 +9,7 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/css/filament/admin/theme.css',
+                'resources/css/filament/superadmin/theme.css',
             ],
             refresh: true,
         }),
@@ -19,7 +20,7 @@ export default defineConfig({
         host: '0.0.0.0',
         port: 5173,
         hmr: {
-            host: 'tpq.syafiqbuana.web.id', // ganti dengan IP PC Anda
+            host: 'localhost', // ganti dengan IP PC Anda
         },
         watch: {
             ignored: ['**/storage/framework/views/**'],

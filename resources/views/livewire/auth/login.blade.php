@@ -1,7 +1,7 @@
 <x-layouts.auth>
     <div class="min-h-screen flex items-center justify-center px-4 ">
 
-        <flux:card class="light-mode-input space-y-6 w-full max-w-md mx-auto border-[1px] border-black">
+        <flux:card class="light-mode-input space-y-6 w-full max-w-md mx-auto">
             <div>
                 <flux:heading class="text-center font-bold" size="xl">{{ config('app.name') }}</flux:heading>
                 <flux:text class="mt-2 text-center text-[#979696]">Selamat datang!</flux:text>

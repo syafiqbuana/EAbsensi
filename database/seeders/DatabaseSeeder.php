@@ -25,10 +25,18 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('123456789'),
         ]);
 
-        
-        $this->call(RoleSeeder::class);
-        $this->call(ClassesSeeder::class);
-        $this->call(StudentSeeder::class);
-        $this->call(ScheduleSeeder::class);
+        $tpqProfile = \App\Models\TpqProfile::create([
+            'slug' => \App\Models\TpqProfile::generateSlug('12345678', 'TPQ Al-Ikhlas'),
+            'name' => 'TPQ Al-Ikhlas',
+            'registration_number' => '12345678',
+            'address' => 'Jl. Kebon Jeruk No. 1',
+            'contact_number' => '081234567890',
+            'status' => 'active',
+        ]);
+
+        $this->callWith(RolesAndPermissionsSeeder::class, ['tpqProfile' => $tpqProfile]);
+        $this->callWith(ClassesSeeder::class, ['tpqProfile' => $tpqProfile]);
+        $this->callWith(StudentSeeder::class, ['tpqProfile' => $tpqProfile]);
+        $this->callWith(ScheduleSeeder::class, ['tpqProfile' => $tpqProfile]);
     }
 }

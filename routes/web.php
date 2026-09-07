@@ -1,11 +1,15 @@
 <?php
 
+use App\Livewire\RegistrationPending;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('auth.login');
 });
 
+// Registration Pending — untuk polling status setelah daftar
+Route::middleware('auth')->get('/register/pending', RegistrationPending::class)
+    ->name('registration.pending');
 
 
 Route::middleware('auth')->group(function () {
