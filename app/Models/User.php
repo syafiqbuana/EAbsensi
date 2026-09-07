@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -96,7 +97,14 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasAnyRole([self::HEAD_TPQ_ROLE, self::TEACHER_ROLE]);
     }
 
-    // ─── Relations ────────────────────────────────────────
+public function scopeHeadTpq(Builder $query, int|string $tpqId): Builder
+    {
+        return $query->whereHas('roles', function (Builder $q) use ($tpqId) {
+            $q->where('name', self::HEAD_TPQ_ROLE)
+            ->where('model_has_roles.team_id', $tpqId);
+        });
+    }
+
 
     public function profile(): HasOne
     {

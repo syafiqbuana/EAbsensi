@@ -29,7 +29,12 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('admin')
             ->path('{tpq_slug}/admin')    // parameter slug dinamis
-            ->brandName(fn () => \App\Support\CurrentTpq::get()?->name ?? config('app.name'))
+            ->brandName(
+                fn() =>
+                request()->route('tpq_slug')
+                ? (\App\Support\CurrentTpq::get()?->name ?? config('app.name'))
+                : config('app.name')
+            )
             ->spa()
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->login(Login::class)
@@ -72,7 +77,7 @@ class AdminPanelProvider extends PanelProvider
                 ResolveTpqTenant::class,   // resolve tenant dari slug
             ])
             ->authMiddleware([
-                 AuthenticateFilamentAdmin::class,
+                AuthenticateFilamentAdmin::class,
             ]);
     }
 }

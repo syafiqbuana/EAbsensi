@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Pages\Auth;
 
 use App\Models\TpqRegistration;
 use App\Support\CurrentTpq;
+use Filament\Actions\Action;
 use Filament\Auth\Http\Responses\Contracts\LoginResponse;
 use Filament\Auth\Pages\Login as BaseLogin;
 use Filament\Facades\Filament;
@@ -13,6 +14,9 @@ use Spatie\Permission\PermissionRegistrar;
 
 class Login extends BaseLogin
 {
+
+
+
 public function mount(): void
 {
     // Jika sudah login, redirect sesuai kondisi
@@ -82,19 +86,14 @@ public function mount(): void
         ]);
     }
 
-    public function registerAction(): \Filament\Actions\Action
+    public function registerAction(): Action
     {
-        $tpqSlug = request()->route('tpq_slug') ?? CurrentTpq::slug();
-
-        return \Filament\Actions\Action::make('register')
+        return Action::make('register')
             ->link()
             ->label(__('filament-panels::auth/pages/login.actions.register.label'))
-            ->url(
-                $tpqSlug
-                ? route('filament.admin.auth.register', ['tpq_slug' => $tpqSlug], false)
-                : '#'
-            );
+            ->url(url('/universal/admin/register'));
     }
+
 
 
 public function authenticate(): ?LoginResponse
