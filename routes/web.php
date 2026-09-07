@@ -31,4 +31,14 @@ Route::middleware('auth')->group(function () {
         return view('leave-requests.create.create');
     })->defaults('title', 'Buat Pengajuan Izin')
         ->name('leaveRequest.create');
+
+    Route::get('/storage/{path}', function (string $path) {
+    $fullPath = storage_path('app/public/' . $path);
+    
+    abort_if(! file_exists($fullPath), 404);
+    
+    return response()->file($fullPath, [
+        'Cache-Control' => 'public, max-age=86400',
+    ]);
+})->where('path', '.*');
 });
