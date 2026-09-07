@@ -7,15 +7,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/storage/{path}', function (string $path) {
-    $fullPath = storage_path('app/public/' . $path);
-    
-    abort_if(! file_exists($fullPath), 404);
-    
-    return response()->file($fullPath, [
-        'Cache-Control' => 'public, max-age=86400',
-    ]);
-})->where('path', '.*');
+
 
 // Registration Pending — untuk polling status setelah daftar
 Route::middleware('auth')->get('/register/pending', RegistrationPending::class)
