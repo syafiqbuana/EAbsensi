@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 
 class AttendancesTable
 {
@@ -38,7 +39,9 @@ class AttendancesTable
                 })
             ])
             ->filters([
-                //
+                DateRangeFilter::make('date')
+                    ->label('Tanggal')
+                    ->columnSpanFull(),
             ])
             ->recordActions([
                 EditAction::make(),

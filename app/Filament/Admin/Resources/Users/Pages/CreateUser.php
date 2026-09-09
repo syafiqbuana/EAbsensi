@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources\Users\Pages;
 
 use App\Filament\Admin\Resources\Users\UserResource;
+use App\Support\CurrentTpq;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateUser extends CreateRecord
@@ -14,8 +15,9 @@ class CreateUser extends CreateRecord
         return $this->getResource()::getUrl('index');
     }
 
-    protected function afterCreate()
+    protected function afterCreate(): void
     {
+        setPermissionsTeamId(CurrentTpq::id());
         $this->record->assignRole('parent');
     }
 }

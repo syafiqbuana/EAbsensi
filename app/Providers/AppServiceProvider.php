@@ -4,8 +4,11 @@ namespace App\Providers;
 
 use App\Models\TpqProfile;
 use App\Observers\TpqProfileObserver;
+use App\Support\CurrentTpq;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Auth\Events\Logout;
+use Illuminate\Support\Facades\Event;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,11 +28,11 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.env') !== 'local') {
             URL::forceScheme('https');
         }
-
-        // atau kalau tetap mau force meski di local:
         URL::forceRootUrl(config('app.url'));
-
-        // Register observers
         TpqProfile::observe(TpqProfileObserver::class);
+
+        Event::listen(function (Logout $event) {
+            CurrentTpq::clear();
+        });
     }
 }

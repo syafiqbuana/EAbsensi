@@ -20,7 +20,7 @@ class TpqProfileResource extends Resource
 
     protected static ?string $navigationLabel = 'Profil TPQ';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::BuildingOffice2;
 
     public static function form(Schema $schema): Schema
     {

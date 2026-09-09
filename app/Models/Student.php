@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\CurrentTpq;
 use Carbon\Carbon;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\PngWriter;
@@ -28,6 +29,7 @@ class Student extends Model
     public static function booted()
     {
         static::creating(function ($model) {
+            $model->tpq_profile_id = CurrentTpq::Id();
             $model->qr_token = uniqid();
         });
     }

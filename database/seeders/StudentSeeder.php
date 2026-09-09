@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Classes;
+use App\Support\CurrentTpq;
 use Illuminate\Database\Seeder;
 use App\Models\Student;
 use Faker\Factory as Faker;
@@ -18,11 +20,14 @@ class StudentSeeder extends Seeder
         $faker = Faker::create('id_ID');
 
         // Fetch existing class IDs to ensure the foreign key (class_id) is valid
-        $classIds = DB::table('classes')->pluck('id')->toArray();
+        $classIds = DB::table('classes')
+            ->where('tpq_profile_id', CurrentTpq::id())
+            ->pluck('id')
+            ->toArray();
 
         // Fallback in case the classes table is currently empty
         if (empty($classIds)) {
-            $classIds = [1, 2, 3]; 
+            $classIds = 2; 
         }
 
         $students = [];
@@ -31,13 +36,13 @@ class StudentSeeder extends Seeder
             $gender = $faker->randomElement(['male', 'female']);
             
             $students[] = [
-                'tpq_profile_id' => $tpqProfile->id,
+                'tpq_profile_id' => 2,
                 'name'        => $faker->name($gender),
                 'birth_date'  => $faker->date('Y-m-d', 'now'),
                 'birth_place' => $faker->city(),
-                'class_id'    => $faker->randomElement($classIds),
+                'class_id'    => 2,
                 'gender'      => $gender,
-                'qr_token'    => uniqid(), // Added here because insert() bypasses the model's booted() method
+                'qr_token'    => uniqid(),
                 'created_at'  => now(),
                 'updated_at'  => now(),
             ];

@@ -13,7 +13,6 @@ use Filament\Facades\Filament;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Schemas\Schema;
@@ -26,7 +25,6 @@ class Register extends BaseRegister
 
     public function mount(): void
 {
-    // Jika sudah login, redirect sesuai kondisi
     if (Filament::auth()->check()) {
         $this->redirect(route('filament.admin.auth.login', [
             'tpq_slug' => request()->route('tpq_slug') ?? 'universal'
@@ -34,7 +32,7 @@ class Register extends BaseRegister
         return;
     }
 
-    $this->form->fill(); // ← INI yang bikin form muncul
+    $this->form->fill();
 }
 
     public function form(Schema $schema): Schema

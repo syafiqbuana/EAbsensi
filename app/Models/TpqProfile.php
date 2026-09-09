@@ -23,14 +23,13 @@ class TpqProfile extends Model
         'registration_number',
         'address',
         'contact_number',
+        'logo_path',
         'status',
     ];
 
     protected $casts = [
         'status' => 'string',
     ];
-
-    // ─── Relasi ───────────────────────────────────────────
 
     public function registrations(): HasMany
     {
@@ -52,14 +51,14 @@ class TpqProfile extends Model
         return $this->hasMany(Classes::class);
     }
 
-    // ─── Slug Generation ─────────────────────────────────
-
     public static function generateSlug(string $registrationNumber, string $name): string
     {
-        return Str::slug($registrationNumber . '-' . $name);
-    }
+        $name = str_replace(' ', '', $name);
 
-    // ─── Query Scopes ─────────────────────────────────────
+        return strtoupper(
+            Str::slug($registrationNumber . '-' . $name)
+        );
+    }
 
     public function scopeActive(Builder $query): Builder
     {

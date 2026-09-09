@@ -15,13 +15,6 @@ class CreateSchedule extends CreateRecord
 {
     protected static string $resource = ScheduleResource::class;
 
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        $data['tpq_profile_id'] = CurrentTpq::id();
-
-        return $data;
-    }
-
     protected function beforeCreate(): void
     {
         // Ambil dari dua sumber berbeda

@@ -2,7 +2,9 @@
 
 namespace App\Filament\Admin\Resources\Students\Schemas;
 
+use App\Models\Classes;
 use App\Models\User;
+use App\Support\CurrentTpq;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -36,7 +38,7 @@ class StudentForm
                                     ->maxLength(255),
                                 Select::make('class_id')
                                     ->label('Kelas')
-                                    ->relationship('classes', 'name')
+                                    ->options(Classes::query()->byTpqProfile(CurrentTpq::id())->pluck('name', 'id'))
                                     ->preload()
                                     ->required()
                                     ->searchable(),
@@ -54,9 +56,7 @@ class StudentForm
                             ->multiple()
                             ->maxItems(2)
                             ->relationship('users', 'name')
-                            ->options(User::query()->whereHas('roles', function ($query) {
-                                $query->where('name', 'parent');
-                            })->pluck('name', 'id'))
+                            ->options(User::query()->byTpqProfile(CurrentTpq::id())->pluck('name', 'id'))
                             ->preload()
                             ->required(),
                     ]),

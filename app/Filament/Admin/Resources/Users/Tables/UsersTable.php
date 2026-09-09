@@ -43,7 +43,7 @@ class UsersTable
                     ->color('danger')
                     ->icon('heroicon-o-x-circle')
                     //visible only when the user is active and has role parent
-                    ->visible(fn ($record) => $record->is_active  && $record->hasRole(User::PARENT_ROlE))
+                    ->visible(fn ($record) => $record->is_active  && $record->hasRole(User::PARENT_ROLE))
                     ,
                 Action::make('activate')
                     ->action(function ($record) {

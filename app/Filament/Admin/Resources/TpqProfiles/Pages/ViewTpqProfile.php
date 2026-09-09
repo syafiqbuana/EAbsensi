@@ -168,6 +168,7 @@ class ViewTpqProfile extends Page implements HasForms
             'registration_number',
             'contact_number',
             'address',
+            'logo_path',
         ]));
 
         $tpqHead = User::query()

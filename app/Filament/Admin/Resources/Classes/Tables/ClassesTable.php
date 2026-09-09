@@ -15,7 +15,7 @@ class ClassesTable
         return $table
             ->columns([
                 TextColumn::make('name')->label('Nama Kelas')->sortable()->searchable(),
-                TextColumn::make('schedules.name')->label('Jadwal')->sortable()->searchable()
+                TextColumn::make('schedules.name')->label('Jadwal')->sortable()->searchable()->badge()
                     ->placeholder('Jadwal belum diatur'),
                 TextColumn::make('students_count')
                     ->badge()
@@ -23,7 +23,7 @@ class ClassesTable
                     ->label('Jumlah Murid'),
             ])
             ->filters([
-                //
+                
             ])
             ->recordActions([
                 EditAction::make(),

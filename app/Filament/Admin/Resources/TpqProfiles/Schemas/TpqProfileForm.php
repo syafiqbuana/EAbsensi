@@ -46,6 +46,13 @@ class TpqProfileForm
                                 ->required()
                                 ->autosize()
                                 ->disabled(!$isEditing),
+                            FileUpload::make('logo_path')
+                                ->label('Logo TPQ')
+                                ->disk('public')
+                                ->directory('tpq-logos')
+                                ->image()
+                                ->columnSpanFull()
+                                ->visible(fn() => $isEditing),
 
                         ]),
                         Fieldset::make('Informasi Kepala TPQ')
@@ -82,17 +89,32 @@ class TpqProfileForm
                                     ->directory('tpq-head-photos')
                                     ->image()
                                     ->visible(fn() => $isEditing),
-                                Placeholder::make('foto_preview')
-                                    ->label('Foto Kepala TPQ')
-                                    ->content(function ($get) {
+                                Fieldset::make('')
+                                    ->columnSpanFull()
+                                    ->contained(false)
+                                    ->schema([
+                                        Placeholder::make('foto_preview')
+                                            ->label('Foto Kepala TPQ')
+                                            ->content(function ($get) {
 
-                                        $path = $get('tpq_head_photo_path');
-                                        if (!$path) {
-                                            return new HtmlString('<span class="text-sm text-gray-500 italic">Belum ada foto</span>');
-                                        }
-                                        $url = Storage::url($path);
-                                        return new HtmlString('<img src="' . $url . '" alt="Foto Kepala TPQ" class="h-32 w-32 object-cover rounded-sm" />');
-                                    })->visible(fn() => !$isEditing),
+                                                $path = $get('tpq_head_photo_path');
+                                                if (!$path) {
+                                                    return new HtmlString('<span class="text-sm text-gray-500 italic">Belum ada foto</span>');
+                                                }
+                                                $url = Storage::url($path);
+                                                return new HtmlString('<img src="' . $url . '" alt="Foto Kepala TPQ" class="h-32 w-32 object-cover rounded-sm" />');
+                                            })->visible(fn() => !$isEditing),
+                                        Placeholder::make('logo_preview')
+                                            ->label('Logo TPQ')
+                                            ->content(function ($get) {
+                                                $path = $get('logo_path');
+                                                if (!$path) {
+                                                    return new HtmlString('<span class="text-sm text-gray-500 italic">Belum ada logo</span>');
+                                                }
+                                                $url = Storage::url($path);
+                                                return new HtmlString('<img src="' . $url . '" alt="Logo TPQ" class="h-32 w-32 object-cover rounded-sm" />');
+                                            })->visible(fn() => !$isEditing),
+                                    ])->disabled(!$isEditing),
                             ])->disabled(!$isEditing),
                     ])
                 ,

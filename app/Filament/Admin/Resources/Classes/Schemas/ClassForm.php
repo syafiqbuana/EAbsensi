@@ -15,7 +15,8 @@ class ClassForm
                 TextInput::make('name')
                     ->label('Nama Kelas')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpanFull(),
             ]);
     }
 }

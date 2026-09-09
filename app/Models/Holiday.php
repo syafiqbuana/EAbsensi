@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\CurrentTpq;
 use Illuminate\Database\Eloquent\Model;
 
 class Holiday extends Model
@@ -13,6 +14,15 @@ class Holiday extends Model
         'end_date' => 'date',
         'is_global' => 'boolean'
     ];
+
+    
+
+    public static function booted()
+    {
+        static::creating(function ($model) {
+            $model->tpq_profile_id = CurrentTpq::Id();
+        });
+    }
 
     public function schedules()
     {

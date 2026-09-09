@@ -11,6 +11,11 @@ class ViewStudent extends ViewRecord
 {
     protected static string $resource = StudentResource::class;
 
+    public function getTitle(): string
+    {
+        return 'Detail Murid';
+    }
+
     protected function getHeaderActions(): array
     {
         return [

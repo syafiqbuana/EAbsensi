@@ -18,7 +18,7 @@ class ScanAttendance extends Page
 
     protected static ?string $title = 'Scan Absensi';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::QrCode;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Camera;
 
     public function processQrScan(string $qrToken): void
     {

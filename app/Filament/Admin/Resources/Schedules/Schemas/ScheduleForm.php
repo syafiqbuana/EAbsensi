@@ -2,6 +2,8 @@
 
 namespace App\Filament\Admin\Resources\Schedules\Schemas;
 
+use App\Models\Classes;
+use App\Support\CurrentTpq;
 use Carbon\Carbon;
 use Closure;
 use Filament\Forms\Components\CheckboxList;
@@ -66,12 +68,13 @@ class ScheduleForm
                     ->label('Kelas')
                     ->multiple()
                     ->relationship('classes', 'name')
+                    ->options(Classes::query()->byTpqProfile(CurrentTpq::id())->pluck('name', 'id'))
                     ->preload()
                     ->searchable(),
                 Select::make('day')
                     ->native(false)
                     ->label('Hari')
-
+                ->multiple()
                     ->options([
                         'monday' => 'Senin',
                         'tuesday' => 'Selasa',

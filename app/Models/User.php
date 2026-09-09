@@ -97,6 +97,13 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasAnyRole([self::HEAD_TPQ_ROLE, self::TEACHER_ROLE]);
     }
 
+    public function scopeByTpqProfile(Builder $query, int|string $tpqId): Builder
+    {
+        return $query->whereHas('roles', function (Builder $q) use ($tpqId) {
+            $q->where('model_has_roles.team_id', $tpqId);
+        });
+    }
+
 public function scopeHeadTpq(Builder $query, int|string $tpqId): Builder
     {
         return $query->whereHas('roles', function (Builder $q) use ($tpqId) {
@@ -198,11 +205,6 @@ public function scopeHeadTpq(Builder $query, int|string $tpqId): Builder
             ->exists();
     }
 
-    // ─── Accessors ────────────────────────────────────────
-
-    /**
-     * Shortcut: ambil full_name dari profile, fallback ke name.
-     */
     public function getDisplayNameAttribute(): string
     {
         return $this->profile?->full_name ?? $this->name;
