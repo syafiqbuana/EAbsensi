@@ -68,7 +68,7 @@ class ScheduleForm
                     ->label('Kelas')
                     ->multiple()
                     ->relationship('classes', 'name')
-                    ->options(Classes::query()->byTpqProfile(CurrentTpq::id())->pluck('name', 'id'))
+                    ->options(CurrentTpq::where(Classes::query())->orderBy('name')->pluck('name', 'id'))
                     ->preload()
                     ->searchable(),
                 Select::make('day')

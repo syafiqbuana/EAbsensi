@@ -11,6 +11,7 @@
         </div>
 
         <div class="text-md font-bold tabular-nums" x-text="time"></div>
+        
     </div>
 </div>
 

@@ -50,7 +50,6 @@ class TpqProfileResource extends Resource
     {
         return [
             'index' => ListTpqProfiles::route('/'),
-            'create' => CreateTpqProfile::route('/create'),
             'view' => ViewTpqProfile::route('/{record}'),
             'edit' => EditTpqProfile::route('/{record}/edit'),
         ];

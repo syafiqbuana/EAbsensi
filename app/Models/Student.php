@@ -34,6 +34,8 @@ class Student extends Model
         });
     }
 
+    
+
     protected function countAge(): Attribute
     {
         return Attribute::make(

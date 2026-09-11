@@ -3,7 +3,9 @@
 namespace App\Support;
 
 use App\Models\TpqProfile;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
+
 
 class CurrentTpq
 {
@@ -21,6 +23,11 @@ class CurrentTpq
             now()->addMinutes(5),
             fn () => TpqProfile::active()->bySlug($slug)->first()
         );
+    }
+
+    public static function name(): ?string
+    {
+        return static::get()?->name;
     }
 
     public static function slug(): ?string
@@ -52,4 +59,9 @@ class CurrentTpq
     {
         Cache::forget("tpq_profile.{$slug}");
     }
+
+    public static function where(Builder $query, string $column = 'tpq_profile_id'): Builder
+{
+    return $query->where($column, static::id());
+}
 }

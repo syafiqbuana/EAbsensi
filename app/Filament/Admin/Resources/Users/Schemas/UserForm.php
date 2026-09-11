@@ -2,6 +2,8 @@
 
 namespace App\Filament\Admin\Resources\Users\Schemas;
 
+use App\Models\Student;
+use App\Support\CurrentTpq;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -30,6 +32,7 @@ class UserForm
                     ->label('Murid')
                     ->maxItems(5)
                     ->relationship('students', 'name')
+                    ->options(CurrentTpq::where(Student::query())->orderBy('name')->pluck('name', 'id'))
                     ->multiple()
                     ->preload(),
                 TextInput::make('password')

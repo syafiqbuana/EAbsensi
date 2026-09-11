@@ -62,7 +62,7 @@ class FortifyServiceProvider extends ServiceProvider
             $user = User::where('email', $request->email)->first();
             if ($user && Hash::check($request->password, $user->password)) {
                 
-                if ($user->hasRole(User::PARENT_ROlE)) {
+                if ($user->hasRole(User::PARENT_ROLE)) {
                     return $user; // Login sukses
                 }
                 // 3. Jika password benar tapi bukan parent, lemparkan error custom

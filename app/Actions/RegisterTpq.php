@@ -27,6 +27,7 @@ class RegisterTpq
             // 2. Upsert user profile
             $user->profile()->updateOrCreate([], [
                 'full_name'    => $data['full_name'],
+                'tpq_profile_id' => null,
                 'phone_number' => $data['phone_number'] ?? null,
                 'address'      => $data['address'] ?? null,
                 'photo_path'   => $data['photo_path'] ?? null,
