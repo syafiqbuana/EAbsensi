@@ -3,7 +3,7 @@
 
         <flux:card class="light-mode-input space-y-6 w-full max-w-md mx-auto">
             <div>
-                <flux:heading class="text-center font-bold" size="xl">{{ config('app.name') }}</flux:heading>
+                <flux:heading class="text-center font-bold" size="xl">{{ App\Support\CurrentTpq::name() }}</flux:heading>
                 <flux:text class="mt-2 text-center text-[#979696]">Selamat datang!</flux:text>
             </div>
 

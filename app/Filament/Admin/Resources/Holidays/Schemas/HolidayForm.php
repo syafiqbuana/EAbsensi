@@ -3,13 +3,14 @@
 namespace App\Filament\Admin\Resources\Holidays\Schemas;
 
 use App\Models\Schedules; // Pastikan nama model sesuai
+use App\Support\CurrentTpq;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextArea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
 
 class HolidayForm
 {
@@ -27,6 +28,7 @@ class HolidayForm
                     ->required(fn($get) => ! $get('is_global'))
                     ->disabled(fn($get) => $get('is_global'))
                     ->relationship('schedules', 'name')
+                    ->options(CurrentTpq::where(Schedules::query())->pluck('name','id'))
                     ->getOptionLabelFromRecordUsing(
                         fn(Schedules $record) => "{$record->name} - Pukul "
                         . substr($record->time_open, 0, 5)
@@ -46,8 +48,7 @@ class HolidayForm
                     ->native(false)
                     ->minDate(fn($get) => $get('start_date'))
                     ->required(),
-                
-                // Tambahkan Toggle LEBIH DULU sebelum Select agar lifecycle-nya lebih aman
+
                 Toggle::make('is_global')
                     ->live()
                     ->label('Terapkan ke seluruh jadwal')

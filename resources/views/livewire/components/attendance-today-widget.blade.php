@@ -77,7 +77,7 @@
                 </p>
                 </div>
 
-                <flux:button wire:navigate variant="primary" size="sm" class="mt-2">
+                <flux:button wire:navigate variant="primary" href="{{ route('attendanceHistoryIndex') }}" color="teal" size="sm" class="mt-2">
                     Riwayat Absensi
                 </flux:button>
             </div>

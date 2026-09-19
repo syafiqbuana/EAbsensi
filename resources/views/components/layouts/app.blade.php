@@ -4,8 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <title class="hidden">{{ App\Support\CurrentTpq::name() }}</title>
 
@@ -20,24 +23,25 @@
     <flux:sidebar sticky stashable class="bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-700">
         <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
         <flux:navlist variant="outline">
-            <flux:navlist.item icon="home" href="/dashboard" wire:navigate>
+            <flux:navlist.item icon="home" href="{{ route('dashboard') }}" wire:navigate>
                 Dasbor
             </flux:navlist.item>
 
             <flux:spacer />
 
-            <flux:navlist.item icon="calendar-days" href="/students-schedules" wire:navigate>
+            <flux:navlist.item icon="calendar-days" href="{{ route('studentsSchedulesIndex') }}" wire:navigate>
                 Jadwal Anak
             </flux:navlist.item>
 
-            <flux:navlist.item icon="clipboard-document-list" href="/absen" wire:navigate>
-                Riwayat Absensi
+            <flux:navlist.item icon="clipboard-document-list" href="{{ route('attendanceHistoryIndex') }}"
+                wire:navigate>
+                Riwayat Kehadiran
             </flux:navlist.item>
 
-            <flux:navlist.item icon="hand-raised" href="/leave-requests" wire:navigate>
+            <flux:navlist.item icon="hand-raised" href="{{ route('leaveRequest') }}" wire:navigate>
                 Pengajuan Izin
             </flux:navlist.item>
-            <flux:navlist.item icon="user-group" href="/izin" wire:navigate>
+            <flux:navlist.item icon="user-group" href="{{ route('childProfile') }}" wire:navigate>
                 Profil Anak
             </flux:navlist.item>
         </flux:navlist>

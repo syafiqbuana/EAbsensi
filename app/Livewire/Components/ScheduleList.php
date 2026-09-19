@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Components;
 
+use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -27,6 +28,7 @@ class ScheduleList extends Component
             ->join('students', 'schedule_class.class_id', '=', 'students.class_id')
             ->join('student_user', 'students.id', '=', 'student_user.student_id')
             ->where('student_user.user_id', $userId)
+            ->where('students.status',Student::STATUS_ACTIVE)
             ->select(
                 'schedules.id',
                 'schedules.name',

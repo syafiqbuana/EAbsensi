@@ -15,8 +15,6 @@ use Spatie\Permission\PermissionRegistrar;
 class Login extends BaseLogin
 {
 
-
-
 public function mount(): void
 {
     // Jika sudah login, redirect sesuai kondisi

@@ -3,9 +3,11 @@
 namespace App\Filament\Admin\Resources\Students\Schemas;
 
 use App\Models\Classes;
+use App\Models\Student;
 use App\Models\User;
 use App\Support\CurrentTpq;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
@@ -42,15 +44,33 @@ class StudentForm
                                     ->preload()
                                     ->required()
                                     ->searchable(),
+                                FileUpload::make('photo_path')
+                                    ->columnSpanFull()
+                                    ->label('Foto Anak')
+                                    ->image()
+                                    ->disk('public')
+                                    ->directory('students/photos')
+                                    ->maxSize(1024)
+                                    ->nullable(),
+                                Select::make('gender')
+                                    ->label('Jenis Kelamin')
+                                    ->native(false)
+                                    ->options([
+                                        'male' => 'Laki-laki',
+                                        'female' => 'Perempuan',
+                                    ])
+                                    ->required(),
+                                Select::make('status')
+                                    ->label('Status')
+                                    ->native(false)
+                                    ->options([
+                                        Student::STATUS_ACTIVE => 'Aktif',
+                                        Student::STATUS_RESIGNED => 'Keluar'
+                                    ])
+                                    ->required()
+                                    ->visible(fn(string $operation): bool => $operation === 'edit'),
                             ]),
-                        Select::make('gender')
-                            ->label('Jenis Kelamin')
-                            ->native(false)
-                            ->options([
-                                'male' => 'Laki-laki',
-                                'female' => 'Perempuan',
-                            ])
-                            ->required(),
+
                         Select::make('users')
                             ->label('Orang Tua / Wali')
                             ->multiple()

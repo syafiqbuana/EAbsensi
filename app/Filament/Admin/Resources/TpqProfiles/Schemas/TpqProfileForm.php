@@ -93,7 +93,8 @@ class TpqProfileForm
                                     ->columnSpanFull()
                                     ->contained(false)
                                     ->schema([
-                                        Placeholder::make('foto_preview')
+                                        Grid::make(2)->schema([
+                                            Placeholder::make('foto_preview')
                                             ->label('Foto Kepala TPQ')
                                             ->content(function ($get) {
 
@@ -114,6 +115,8 @@ class TpqProfileForm
                                                 $url = Storage::url($path);
                                                 return new HtmlString('<img src="' . $url . '" alt="Logo TPQ" class="h-32 w-32 object-cover rounded-sm" />');
                                             })->visible(fn() => !$isEditing),
+                                        ])
+                                        
                                     ])->disabled(!$isEditing),
                             ])->disabled(!$isEditing),
                     ])

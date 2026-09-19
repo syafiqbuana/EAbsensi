@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_RESIGNED = 'resigned';
     protected $fillable =
         [
             'tpq_profile_id',
@@ -20,6 +22,8 @@ class Student extends Model
             'gender',
             'birth_place',
             'qr_token',
+            'status',
+            'photo_path',
         ];
 
     protected $casts = [
@@ -34,13 +38,16 @@ class Student extends Model
         });
     }
 
-    
+    public function scopeActive($query)
+    {
+        return $query->where('status', self::STATUS_ACTIVE);
+    }
 
     protected function countAge(): Attribute
     {
         return Attribute::make(
             get: function () {
-                if (! $this->birth_date) {
+                if (!$this->birth_date) {
                     return null;
                 }
                 $birthDate = $this->birth_date;
@@ -73,10 +80,7 @@ class Student extends Model
             get: function () {
                 // Perhatikan penambahan ?-> di bawah ini
                 $attendanceToday = $this->attendances?->firstWhere('date', Carbon::today()->toDateString());
-
-                // Jika $this->attendances null, $attendanceToday juga akan otomatis null,
-                // sehingga kode akan aman masuk ke pengecekan ini:
-                if (! $attendanceToday) {
+                if (!$attendanceToday) {
                     return 'Belum ada sesi';
                 }
 

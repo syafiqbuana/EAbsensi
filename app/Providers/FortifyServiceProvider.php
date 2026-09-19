@@ -6,9 +6,12 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Http\Responses\LoginResponse;
 use App\Models\User;
+use App\Support\CurrentTpq;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -25,7 +28,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+
     }
 
     /**
@@ -38,7 +41,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::redirectUserForTwoFactorAuthenticationUsing(RedirectIfTwoFactorAuthenticatable::class);
-
+        
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
 
@@ -57,22 +60,29 @@ class FortifyServiceProvider extends ServiceProvider
             );
         });
 
-        Fortify::authenticateUsing(function (Request $request){
-            // Cari user berdasarkan email
+        Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('email', $request->email)->first();
-            if ($user && Hash::check($request->password, $user->password)) {
-                
-                if ($user->hasRole(User::PARENT_ROLE)) {
-                    return $user; // Login sukses
-                }
-                // 3. Jika password benar tapi bukan parent, lemparkan error custom
+
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return null;
+            }
+
+            if (!$user->hasRole(User::PARENT_ROLE)) {
                 throw ValidationException::withMessages([
                     'email' => 'Akun ini tidak memiliki hak akses sebagai Orang Tua/Wali.',
                 ]);
             }
-            return null;
+
+            if ($user->profile?->tpq_profile_id !== CurrentTpq::id()) {
+                throw ValidationException::withMessages([
+                    'email' => 'Akun Anda tidak terdaftar pada TPQ ini.',
+                ]);
+            }
+
+            return $user;
         });
 
         Fortify::loginView(fn() => view('livewire.auth.login'));
+        $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
     }
 }

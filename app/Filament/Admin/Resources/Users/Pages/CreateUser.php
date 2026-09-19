@@ -15,6 +15,12 @@ class CreateUser extends CreateRecord
         return $this->getResource()::getUrl('index');
     }
 
+
+    public function getTitle(): string
+    {
+        return 'Buat Pengguna';
+    }
+
     protected function afterCreate(): void
     {
         setPermissionsTeamId(CurrentTpq::id());

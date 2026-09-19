@@ -65,7 +65,7 @@
                     Batal
                 </flux:button>
 
-                <flux:button type="submit" variant="primary" size="sm" wire:loading.attr="disabled">
+                <flux:button type="submit" variant="primary" color="teal" size="sm" wire:loading.attr="disabled">
                     <span wire:loading.remove wire:target="save">Kirim Permohonan</span>
                     <span wire:loading wire:target="save">Sedang Memproses...</span>
                 </flux:button>

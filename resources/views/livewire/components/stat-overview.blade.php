@@ -5,7 +5,7 @@
         </div>
         <flux:heading level="2" size="lg">Jumlah Anak</flux:heading>
         <span class="font-bold text-[18px]">{{ $students }} Anak</span>
-        <flux:link href="/students-schedules" class="inline-flex items-center text-sm underline">
+        <flux:link href="{{ route('studentsSchedulesIndex') }}" wire:navigate class="inline-flex items-center text-sm underline">
             <span>Detail</span>
         </flux:link>
     </flux:card>
@@ -16,7 +16,7 @@
         </div>
         <flux:heading level="2" size="lg">Jumlah Jadwal</flux:heading>
         <span class="font-bold text-[18px]">{{ $schedules }} Jadwal</span>
-        <flux:link href="/students-schedules" class="inline-flex items-center gap-1 text-sm underline">
+        <flux:link href="{{ route('childProfile') }}" wire:navigate class="inline-flex items-center gap-1 text-sm underline">
             <span>Detail</span>
         </flux:link>
     </flux:card>
@@ -26,7 +26,7 @@
         </div>
         <flux:heading level="2" size="lg">Rasio Kehadiran</flux:heading>
         <span class="font-bold text-[18px]">80% Kehadiran</span>
-        <flux:link href="/students-schedules" class="inline-flex items-center gap-1 text-sm underline">
+        <flux:link href="{{ route('attendanceHistoryIndex') }}" wire:navigate class="inline-flex items-center gap-1 text-sm underline">
             <span>Detail</span>
         </flux:link>
     </flux:card>
@@ -37,7 +37,7 @@
 
         <flux:heading level="2" size="lg">Tidak Hadir</flux:heading>
         <span class="font-bold text-[18px]">{{ $totalAbsence }} Hari</span>
-        <flux:link href="/students-schedules" class="inline-flex items-center gap-1 text-sm underline">
+        <flux:link href="{{route('attendanceHistoryIndex')}}" wire:navigate class="inline-flex items-center gap-1 text-sm underline">
             <span>Detail</span>
         </flux:link>
     </flux:card>

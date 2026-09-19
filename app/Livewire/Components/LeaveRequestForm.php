@@ -36,7 +36,7 @@ class LeaveRequestForm extends Component
 
     public function mount()
     {
-        $this->students = Student::whereHas('users', function ($query) {
+        $this->students = Student::active()->whereHas('users', function ($query) {
             $query->where('user_id', auth()->id());
         })->get();
     }

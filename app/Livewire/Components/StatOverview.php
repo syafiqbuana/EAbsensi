@@ -3,6 +3,7 @@
 namespace App\Livewire\Components;
 
 use App\Models\Attendance;
+use App\Services\StudentDataService;
 use Livewire\Component;
 
 class StatOverview extends Component
@@ -14,20 +15,28 @@ class StatOverview extends Component
 
     public function mount()
     {
-        $user = auth()->user()->load('students.classes.schedules');
+        $userId = auth()->id();
 
-        $this->students = $user->students->count();
+        $students = StudentDataService::getActiveStudentsForUser($userId);
 
-        $this->schedules = $user->students
+        $this->students = $students->count();
+
+        $this->schedules = $students
             ->pluck('classes')
             ->filter()
             ->flatMap->schedules
             ->unique('id')
             ->count();
 
-        $studentIds = $user->students->pluck('id');
+        $studentIds = $students->pluck('id');
 
-        $this->totalAbsence = Attendance::whereIn('student_id',$studentIds)->whereIn('status',['sick','permission','absent'])->count();
+        $this->totalAbsence = Attendance::whereIn('student_id', $studentIds)
+            ->whereIn('status', [
+                'sick',
+                'permission',
+                'absent',
+            ])
+            ->count();
     }
 
     public function render()

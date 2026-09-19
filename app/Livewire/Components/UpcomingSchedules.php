@@ -20,8 +20,6 @@ class UpcomingSchedules extends Component
 
         $this->time = $now->format('H:i:s');
         $this->today = strtolower($now->englishDayOfWeek);
-
-        // Batas maksimal: besok jam 23:59:59
         $endOfTomorrow = Carbon::tomorrow()->endOfDay();
 
         $dayTranslations = [
@@ -34,17 +32,8 @@ class UpcomingSchedules extends Component
             'sunday' => 'Minggu',
         ];
 
-        $user = auth()->user();
+        $students = \App\Services\StudentDataService::getActiveStudentsForUser(auth()->id());
 
-        /*
-         * Ambil hanya student yang berada
-         * pada TPQ aktif.
-         */
-        $students = CurrentTpq::where(
-            $user->students()
-        )
-            ->with('classes.schedules')
-            ->get();
 
         $this->upcomingSchedules = $students
             ->filter(fn ($student) => $student->classes)
@@ -75,18 +64,12 @@ class UpcomingSchedules extends Component
                                 $scheduleTime = Carbon::parse(
                                     "{$dayName} {$schedule->time_open}"
                                 );
-
-                                // Abaikan jadwal hari ini
                                 if ($scheduleTime->isToday()) {
                                     continue;
                                 }
-
-                                // Jika sudah lewat, geser ke minggu depan
                                 if ($scheduleTime->isPast()) {
                                     $scheduleTime->addWeek();
                                 }
-
-                                // Abaikan jika lebih dari besok
                                 if ($scheduleTime->greaterThan($endOfTomorrow)) {
                                     continue;
                                 }

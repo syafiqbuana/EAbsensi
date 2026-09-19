@@ -2,7 +2,16 @@
 @import '../../vendor/livewire/flux/dist/flux.css';
 
 @theme {
-    --font-sans: 'Geist Sans', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
 }
 
 @variant dark (&:where(.dark, .dark *));
+
+.hide-scrollbar {
+    -ms-overflow-style: none;  /* IE dan Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari */
+}

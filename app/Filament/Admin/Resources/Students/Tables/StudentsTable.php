@@ -24,6 +24,7 @@ class StudentsTable
     {
         return $table
             ->columns([
+                ImageColumn::make('photo_path')->disk('public')->circular()->label('Foto Murid'),
                 ImageColumn::make('qr_code')
                     ->label('QR Code')
                     ->state(fn(Student $record) => $record->qr_code)
@@ -35,6 +36,18 @@ class StudentsTable
                 TextColumn::make('users.address')
                     ->label('Alamat'),
                 TextColumn::make('classes.name')->label('Kelas'),
+                TextColumn::make('status')
+                    ->label('Status')
+                    ->color(fn(string $state):string => match ($state) {
+                        'active' => 'success',
+                        'resigned' => 'danger',
+                        default => $state
+                    })
+                    ->badge()->formatStateUsing(fn(string $state):string => match($state) {
+                        'active' => 'Aktif',
+                        'resigned' => 'Keluar',
+                        default => $state
+                    }),
                 TextColumn::make('gender')->badge()->formatStateUsing(fn(string $state): string => match ($state) {
                     'male' => 'Laki-laki',
                     'female' => 'Perempuan',

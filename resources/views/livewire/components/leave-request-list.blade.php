@@ -3,7 +3,7 @@
     <!-- Tombol Action (Selalu tampil di atas daftar) -->
     <div class="flex justify-end mt-2">
         <!-- Gunakan wire:navigate agar transisi halaman cepat seperti SPA -->
-        <flux:button href="{{ route('leaveRequest.create') }}" wire:navigate variant="primary" size="sm">
+        <flux:button href="{{ route('leaveRequest.create') }}" wire:navigate variant="primary" color="teal" size="sm">
             Buat Pengajuan
         </flux:button>
     </div>

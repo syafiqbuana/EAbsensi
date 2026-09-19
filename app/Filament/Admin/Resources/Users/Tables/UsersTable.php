@@ -16,11 +16,11 @@ class UsersTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('profile.full_name')->label('Nama Lengkap')->sortable()->searchable(),
                 TextColumn::make('email')->sortable()->searchable(),
-                TextColumn::make('address')->sortable()->searchable(),
+                TextColumn::make('profile.address')->label('Alamat')->sortable()->searchable(),
                 TextColumn::make('is_active')
-                    ->label('Status')
+                    ->label('Status Akun')
                     ->sortable()
                     ->searchable()
                     ->badge()

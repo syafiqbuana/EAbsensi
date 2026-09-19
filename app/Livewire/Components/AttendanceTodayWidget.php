@@ -11,16 +11,12 @@ class AttendanceTodayWidget extends Component
 
     public function mount()
     {
-        // 1. Ambil user beserta siswa dan kelasnya.
-        // 2. Load attendance HANYA untuk hari ini beserta jadwalnya.
-        $user = auth()->user()->load([
-            'students.classes',
-            'students.attendances' => function ($query) {
-                $query->whereDate('date', Carbon::today())->with('schedule');
-            }
-        ]);
-        
-        $students = $user->students;
+        $students = \App\Services\StudentDataService::getActiveStudentsForUser(auth()->id());
+        $students->load(['attendances' => function ($query) {
+            $query->whereDate('date', Carbon::today())
+                ->with('schedule');
+        }]);
+
 
         // 3. Looping setiap siswa milik user tersebut
         foreach ($students as $student) {
@@ -31,17 +27,17 @@ class AttendanceTodayWidget extends Component
 
             // Data default jika tidak ada kelas / belum ada generate absen hari ini
             $studentInfo = [
-                'name'              => $student->name,
-                'class_name'        => $class ? $class->name : 'Belum ada kelas',
-                'schedule_name'     => 'Tidak ada jadwal',
+                'name' => $student->name,
+                'class_name' => $class ? $class->name : 'Belum ada kelas',
+                'schedule_name' => 'Tidak ada jadwal',
                 'attendance_status' => 'Belum ada sesi',
             ];
 
             // 4. Jika record absensi hari ini ditemukan dan memiliki jadwal yang terikat
             if ($todayAttendance && $todayAttendance->schedule) {
                 $schedule = $todayAttendance->schedule;
-                
-                $studentInfo['schedule_name']     = $schedule->name;
+
+                $studentInfo['schedule_name'] = $schedule->name;
                 $studentInfo['attendance_status'] = $this->resolveAttendanceStatus($todayAttendance, $schedule);
             }
 
@@ -55,9 +51,9 @@ class AttendanceTodayWidget extends Component
      */
     private function resolveAttendanceStatus($attendance, $schedule): string
     {
-        $now      = Carbon::now();
+        $now = Carbon::now();
         $timeOpen = Carbon::today()->setTimeFromTimeString($schedule->time_open);
-        
+
         // Jika jadwalnya belum saatnya dibuka
         if ($now->lt($timeOpen)) {
             return 'Belum Dibuka';
@@ -65,13 +61,13 @@ class AttendanceTodayWidget extends Component
 
         // Return status sesuai enum di database
         return match ($attendance->status) {
-            'pending'    => 'Menunggu Absensi',
-            'present'    => 'Hadir',
-            'sick'       => 'Sakit',
+            'pending' => 'Menunggu Absensi',
+            'present' => 'Hadir',
+            'sick' => 'Sakit',
             'permission' => 'Izin',
-            'absent'     => 'Alfa',
-            'holiday'    => 'Hari Libur',
-            default      => $attendance->status,
+            'absent' => 'Alfa',
+            'holiday' => 'Hari Libur',
+            default => $attendance->status,
         };
     }
 
