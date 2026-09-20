@@ -38,5 +38,7 @@ class DatabaseSeeder extends Seeder
         $this->callWith(ClassesSeeder::class, ['tpqProfile' => $tpqProfile]);
         $this->callWith(StudentSeeder::class, ['tpqProfile' => $tpqProfile]);
         $this->callWith(ScheduleSeeder::class, ['tpqProfile' => $tpqProfile]);
+
+        $this->call(TpqDemoSeeder::class);
     }
 }

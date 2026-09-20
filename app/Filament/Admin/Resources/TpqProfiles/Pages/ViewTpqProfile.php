@@ -16,7 +16,7 @@ use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Facades\Storage; // Hapus jika tidak digunakan
 
 class ViewTpqProfile extends Page implements HasForms
 {
@@ -31,6 +31,9 @@ class ViewTpqProfile extends Page implements HasForms
     public array $tpqHeadData = [];
 
     public bool $isEditing = false;
+
+    // Tambahkan property ini untuk mem-bypass query berulang (Memoization)
+    protected ?TpqProfile $cachedTpqProfile = null;
 
     public function getTitle(): string|Htmlable
     {
@@ -54,13 +57,13 @@ class ViewTpqProfile extends Page implements HasForms
                 : 'Lihat',
         ];
     }
+
     public function form(Schema $form): Schema
     {
         return TpqProfileForm::configure(
             $form,
             $this->isEditing
-        )
-            ->statePath('data');
+        )->statePath('data');
     }
 
     public function mount(): void
@@ -70,6 +73,7 @@ class ViewTpqProfile extends Page implements HasForms
         if (!$tpqProfile) {
             abort(404, 'Profil TPQ tidak ditemukan.');
         }
+
         $this->getTpqHead($tpqProfile);
         $this->fillForm($tpqProfile);
     }
@@ -88,19 +92,30 @@ class ViewTpqProfile extends Page implements HasForms
         }
     }
 
+    /**
+     * OPTIMASI: 
+     * Simpan hasil pencarian ke dalam property $cachedTpqProfile.
+     * Jika method dipanggil berkali-kali, tidak perlu hit database lagi.
+     */
     protected function getTpqProfile(): ?TpqProfile
     {
+        if (isset($this->cachedTpqProfile)) {
+            return $this->cachedTpqProfile;
+        }
+
         $id = CurrentTpq::id();
 
         if (!$id) {
             return null;
         }
-        return TpqProfile::find($id);
+
+        return $this->cachedTpqProfile = TpqProfile::find($id);
     }
 
     protected function getTpqHead(TpqProfile $tpqProfile): void
     {
         setPermissionsTeamId($tpqProfile->id);
+        
         $tpqHead = User::query()
             ->headTpq($tpqProfile->id)
             ->with('profile')
@@ -108,23 +123,16 @@ class ViewTpqProfile extends Page implements HasForms
 
         if (!$tpqHead) {
             $this->tpqHeadData = [];
-
             return;
         }
 
         $profile = $tpqHead->profile;
 
         $this->tpqHeadData = [
-            'full_name' => $profile?->full_name
-                ?? $tpqHead->name,
-
+            'full_name' => $profile?->full_name ?? $tpqHead->name,
             'email' => $tpqHead->email,
-
-            'phone_number' => $profile?->phone_number
-                ?? '-',
-
-            'address' => $profile?->address
-                ?? '-',
+            'phone_number' => $profile?->phone_number ?? '-',
+            'address' => $profile?->address ?? '-',
             'photo_path' => $profile?->photo_path,
         ];
     }
@@ -133,20 +141,11 @@ class ViewTpqProfile extends Page implements HasForms
     {
         $this->form->fill([
             ...$tpqProfile->toArray(),
-            'tpq_head_name' => $this->tpqHeadData['full_name']
-                ?? null,
-
-            'tpq_head_email' => $this->tpqHeadData['email']
-                ?? null,
-
-            'tpq_head_phone_number' => $this->tpqHeadData['phone_number']
-                ?? null,
-
-            'tpq_head_address' => $this->tpqHeadData['address']
-                ?? null,
-
-            'tpq_head_photo_path' => $this->tpqHeadData['photo_path']
-                ?? null,
+            'tpq_head_name' => $this->tpqHeadData['full_name'] ?? null,
+            'tpq_head_email' => $this->tpqHeadData['email'] ?? null,
+            'tpq_head_phone_number' => $this->tpqHeadData['phone_number'] ?? null,
+            'tpq_head_address' => $this->tpqHeadData['address'] ?? null,
+            'tpq_head_photo_path' => $this->tpqHeadData['photo_path'] ?? null,
         ]);
     }
 
@@ -162,7 +161,7 @@ class ViewTpqProfile extends Page implements HasForms
 
         $state = $this->form->getState();
 
-        // Only update fields belonging to tpq_profiles table.
+        // Update profil tpq
         $tpqProfile->update(Arr::only($state, [
             'name',
             'registration_number',
@@ -177,7 +176,6 @@ class ViewTpqProfile extends Page implements HasForms
             ->first();
 
         if ($tpqHead) {
-
             $tpqHead->update([
                 'email' => $state['tpq_head_email'] ?? $tpqHead->email,
             ]);
@@ -189,7 +187,10 @@ class ViewTpqProfile extends Page implements HasForms
             ]);
         }
 
+        // Refresh state
         $tpqProfile->refresh();
+        $this->cachedTpqProfile = $tpqProfile; // Perbarui cache class setelah diubah
+        
         $this->getTpqHead($tpqProfile);
         $this->fillForm($tpqProfile);
         $this->isEditing = false;
@@ -199,6 +200,7 @@ class ViewTpqProfile extends Page implements HasForms
             ->body('Profil TPQ beserta data Kepala TPQ berhasil diperbarui.')
             ->success()
             ->send();
+            
         $this->redirect(request()->header('Referer'));
     }
 
@@ -206,37 +208,18 @@ class ViewTpqProfile extends Page implements HasForms
     {
         return [
             Action::make('editData')
-                ->label(
-                    fn() => $this->isEditing
-                    ? 'Batal Edit'
-                    : 'Edit Data'
-                )
-                ->icon(
-                    fn() => $this->isEditing
-                    ? 'heroicon-o-x-mark'
-                    : 'heroicon-o-pencil-square'
-                )
-                ->color(
-                    fn() => $this->isEditing
-                    ? 'gray'
-                    : 'success'
-                )
+                ->label(fn() => $this->isEditing ? 'Batal Edit' : 'Edit Data')
+                ->icon(fn() => $this->isEditing ? 'heroicon-o-x-mark' : 'heroicon-o-pencil-square')
+                ->color(fn() => $this->isEditing ? 'gray' : 'success')
                 ->action('toggleEdit')
-                ->visible(
-                    fn() => Gate::allows('update', $this->getTpqProfile())
-                ),
+                ->visible(fn() => Gate::allows('update', $this->getTpqProfile())),
 
             Action::make('saveData')
                 ->label('Simpan')
                 ->icon('heroicon-o-check')
                 ->color('primary')
                 ->action('save')
-                ->visible(
-                    fn() =>
-                    $this->isEditing
-                    && Gate::allows('update', $this->getTpqProfile())
-                ),
-
+                ->visible(fn() => $this->isEditing && Gate::allows('update', $this->getTpqProfile())),
         ];
     }
 }

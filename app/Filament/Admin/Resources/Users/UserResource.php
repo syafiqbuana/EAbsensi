@@ -44,19 +44,15 @@ class UserResource extends Resource
         ];
     }
 
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->where(['is_superadmin' => false])
-            ->whereHas('roles', function ($query) {
-                $query->where('name', 'parent');
-            })
-            ->whereHas('students', function ($query) {
-                $query->where('students.tpq_profile_id', CurrentTpq::id());
-            })
-            ->whereKeyNot(auth()->id())
-            ->has('roles', '=', 1);
-    }
+public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery()
+        ->with(['roles', 'profile'])
+        ->where(['is_superadmin' => false])
+        ->whereHas('roles', fn($q) => $q->where('name', 'parent'), '=', 1)
+        ->whereHas('students', fn($q) => $q->where('students.tpq_profile_id', CurrentTpq::id()))
+        ->whereKeyNot(auth()->id());
+}
 
     public static function getPages(): array
     {

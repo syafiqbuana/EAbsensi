@@ -25,10 +25,6 @@ class StudentsTable
         return $table
             ->columns([
                 ImageColumn::make('photo_path')->disk('public')->circular()->label('Foto Murid'),
-                ImageColumn::make('qr_code')
-                    ->label('QR Code')
-                    ->state(fn(Student $record) => $record->qr_code)
-                    ->square(),
                 TextColumn::make('name')->label('Nama')->sortable()->searchable(),
                 TextColumn::make('birth_date')->label('Tanggal Lahir')->sortable()->date('Y-m-d'),
                 TextColumn::make('count_age')->label('Umur')->sortable(),

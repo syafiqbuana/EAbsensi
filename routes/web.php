@@ -5,7 +5,7 @@ use App\Livewire\RegistrationPending;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
-Route::get('/', fn() => abort(404));
+Route::get('/', fn() => view('welcome'));
 
 Route::get('/login', fn() => abort(404))->name('login');
 

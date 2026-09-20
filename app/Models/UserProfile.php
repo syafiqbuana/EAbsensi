@@ -20,7 +20,7 @@ class UserProfile extends Model
 
     public static function booted() {
         static::creating(function($model) {
-            $model->tp_profile_id = CurrentTpq::id();
+            $model->tpq_profile_id = CurrentTpq::id();
         });
     }
 
