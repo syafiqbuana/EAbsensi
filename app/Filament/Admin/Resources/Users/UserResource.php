@@ -21,7 +21,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $pluralModelLabel = 'Pengguna';
+    protected static ?string $pluralModelLabel = 'Akun Walisantri';
 
     protected static string|UnitEnum|null $navigationGroup = 'Administrasi';
 

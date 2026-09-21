@@ -33,6 +33,10 @@
                 Jadwal Anak
             </flux:navlist.item>
 
+            <flux:navlist.item icon="user-group" href="{{ route('studentsIndex') }}" wire:navigate>
+                Anggota Kelas
+            </flux:navlist.item>
+
             <flux:navlist.item icon="clipboard-document-list" href="{{ route('attendanceHistoryIndex') }}"
                 wire:navigate>
                 Riwayat Kehadiran
@@ -41,7 +45,7 @@
             <flux:navlist.item icon="hand-raised" href="{{ route('leaveRequest') }}" wire:navigate>
                 Pengajuan Izin
             </flux:navlist.item>
-            <flux:navlist.item icon="user-group" href="{{ route('childProfile') }}" wire:navigate>
+            <flux:navlist.item icon="user-circle" href="{{ route('childProfile') }}" wire:navigate>
                 Profil Anak
             </flux:navlist.item>
         </flux:navlist>

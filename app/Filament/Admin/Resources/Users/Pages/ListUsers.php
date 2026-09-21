@@ -22,7 +22,7 @@ class ListUsers extends ListRecords
                     $user->assignRole(['parent']);
 
                     return $user;
-                })->label('Tambah Pengguna')
+                })->label('Buat Akun')
         ];
     }
 

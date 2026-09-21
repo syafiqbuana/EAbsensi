@@ -91,12 +91,6 @@ class ViewTpqProfile extends Page implements HasForms
             $this->fillForm($tpqProfile);
         }
     }
-
-    /**
-     * OPTIMASI: 
-     * Simpan hasil pencarian ke dalam property $cachedTpqProfile.
-     * Jika method dipanggil berkali-kali, tidak perlu hit database lagi.
-     */
     protected function getTpqProfile(): ?TpqProfile
     {
         if (isset($this->cachedTpqProfile)) {
@@ -161,7 +155,6 @@ class ViewTpqProfile extends Page implements HasForms
 
         $state = $this->form->getState();
 
-        // Update profil tpq
         $tpqProfile->update(Arr::only($state, [
             'name',
             'registration_number',

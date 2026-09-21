@@ -5,7 +5,11 @@ use App\Livewire\RegistrationPending;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
-Route::get('/', fn() => view('welcome'));
+Route::get('/', function () {
+    return redirect()->route('filament.admin.auth.login', [
+        'tpq_slug' => 'universal',
+    ]);
+});
 
 Route::get('/login', fn() => abort(404))->name('login');
 
@@ -37,6 +41,8 @@ Route::prefix('{tpq_slug}')
             Route::get('/students-schedules', fn() => view('students-schedules.index'))
                 ->name('studentsSchedulesIndex')
                 ->defaults('title', 'Jadwal Anak');
+            
+            Route::get('/students',fn() =>view('students.index'))->name('studentsIndex')->defaults('title','Anggota Kelas');
 
             Route::get('/attendances-history', fn() => view('attendances-history.index'))
                 ->name('attendanceHistoryIndex')

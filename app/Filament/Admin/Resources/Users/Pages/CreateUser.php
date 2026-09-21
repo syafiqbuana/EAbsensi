@@ -18,7 +18,7 @@ class CreateUser extends CreateRecord
 
     public function getTitle(): string
     {
-        return 'Buat Pengguna';
+        return 'Buat Akun Walisantri';
     }
 
     protected function afterCreate(): void

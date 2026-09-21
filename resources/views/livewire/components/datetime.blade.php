@@ -1,17 +1,20 @@
 <div
     x-data="clock()"
     x-init="start()"
+    class="shrink-0"
 >
-    <div class="flex items-center flex-row gap-3">
+    <div class="flex items-center flex-row gap-2 whitespace-nowrap">
         <div>
-            <p class="text-sm font-medium">
-                <span x-text="day"></span> ,
+            <p class="text-xs sm:text-sm font-medium whitespace-nowrap">
+                <span x-text="day"></span>,
                 <span x-text="date"></span>
             </p>
         </div>
 
-        <div class="text-md font-bold tabular-nums" x-text="time"></div>
-        
+        <div
+            class="text-sm sm:text-md font-bold tabular-nums whitespace-nowrap"
+            x-text="time"
+        ></div>
     </div>
 </div>
 
