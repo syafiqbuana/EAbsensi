@@ -3,8 +3,8 @@
 <p align="center">
   <img src="https://img.shields.io/badge/PHP-8.3-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.3">
   <img src="https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 12">
-  <img src="https://img.shields.io/badge/Livewire-3.x-4E56A6?style=for-the-badge&logo=livewire&logoColor=white" alt="Livewire">
-  <img src="https://img.shields.io/badge/Filament-3.x-E5A50A?style=for-the-badge&logo=filament&logoColor=white" alt="Filament">
+  <img src="https://img.shields.io/badge/Livewire-4.x-4E56A6?style=for-the-badge&logo=livewire&logoColor=white" alt="Livewire">
+  <img src="https://img.shields.io/badge/Filament-5.x-E5A50A?style=for-the-badge&logo=filament&logoColor=white" alt="Filament">
   <img src="https://img.shields.io/badge/Flux_UI-Enabled-06B6D4?style=for-the-badge" alt="Flux UI">
   <img src="https://img.shields.io/badge/Architecture-Multi--Tenant-green?style=for-the-badge" alt="Multi-Tenant">
 </p>
@@ -64,9 +64,9 @@ Built on top of the **TALL Stack (Tailwind CSS, Alpine.js, Laravel 12, Livewire)
 | Layer | Technology / Package | Purpose |
 | :--- | :--- | :--- |
 | **Backend Framework** | **Laravel 12.x** (PHP 8.3+) | Core Application Logic & REST Services |
-| **Admin Panel** | **Filament 3.x** | Enterprise Admin Backoffice & Data Tables |
-| **Reactive Frontend** | **Livewire 3.x** & **Flux UI** | Dynamic Client-Side Interactivity without API overhead |
-| **Styling & UI** | **Tailwind CSS 3.x** & **Vite** | Modern, responsive utility-first design system |
+| **Admin Panel** | **Filament 5.x** | Enterprise Admin Backoffice & Data Tables |
+| **Reactive Frontend** | **Livewire 4.x** & **Flux UI** | Dynamic Client-Side Interactivity without API overhead |
+| **Styling & UI** | **Tailwind CSS 4.x** & **Vite** | Modern, responsive utility-first design system |
 | **Database ORM** | **MySQL 8.0+** / **MariaDB** | Relational storage with strict foreign keys & SET fields |
 | **Authentication** | **Laravel Fortify** | 2FA, Passkeys, Session Security & Password Reset |
 | **Permissions** | **Spatie Laravel-Permission** | Granular Role & Permission Management |
@@ -160,8 +160,10 @@ Ensure your local development environment meets the following requirements:
    ```bash
    php artisan serve
    ```
-   * Access Admin Panel: `http://127.0.0.1:8000/admin`
-   * Access Tenant Portal: `http://127.0.0.1:8000/{tenant-slug}`
+   * Access Admin tenant Panel: `http://127.0.0.1:8000/{tenant-slug}admin/login`
+   * Access parent Portal: `http://127.0.0.1:8000/{tenant-slug}/login`
+   * Access superadmin: `http://127.0.0.1:8000/superadmin/login`
+   * Universal Login : `http://127.0.0.1:8000/universal/admin/login`
 
 ---
 
