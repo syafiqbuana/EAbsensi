@@ -10,13 +10,10 @@ Route::get('/', function () {
         'tpq_slug' => 'universal',
     ]);
 });
-
 Route::get('/login', fn() => abort(404))->name('login');
-
 Route::middleware('auth')
     ->get('/register/pending', RegistrationPending::class)
     ->name('registration.pending');
-
 Route::prefix('{tpq_slug}')
     ->where(['tpq_slug' => '[a-zA-Z0-9\-]+'])
     ->middleware([ResolveTpqTenant::class])
@@ -26,14 +23,12 @@ Route::prefix('{tpq_slug}')
                 AuthenticatedSessionController::class,
                 'create',
             ])->name('tenant.login');
-
             Route::post('/login', [
                 AuthenticatedSessionController::class,
                 'store',
             ])->name('tenant.login.store');
         });
         Route::middleware('auth')->group(function () {
-
             Route::get('/dashboard', fn() => view('dashboard.index'))
                 ->name('dashboard')
                 ->defaults('title', 'Dasbor');

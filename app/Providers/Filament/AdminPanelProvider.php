@@ -42,6 +42,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Indigo,
             ])
+            ->databaseNotifications()
             //set navigation icon
 
             ->navigationGroups([
