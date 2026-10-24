@@ -20,7 +20,6 @@ use Illuminate\Support\Str;
 class GenerateQrPdfJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
     public function __construct(
         public User $user,
         public int $tpqProfileId,

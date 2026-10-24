@@ -36,7 +36,18 @@
                     <div class="flex flex-col gap-3 text-sm">
                         <div class="flex justify-between items-center">
                             <span class="text-zinc-500">Tanggal</span>
-                            <span class="font-medium text-zinc-900">{{ $request->date->format('d M Y') }}</span>
+                            <span class="font-medium text-zinc-900">
+                                @if ($request->start_date)
+                                    @if ($request->end_date && ! $request->end_date->equalTo($request->start_date))
+                                        {{ $request->start_date->format('d M Y') }} - {{ $request->end_date->format('d M Y') }}
+                                    @else
+                                        {{ $request->start_date->format('d M Y') }}
+                                    @endif
+                                    ({{ $request->total_days }} hari)
+                                @else
+                                    -
+                                @endif
+                            </span>
                         </div>
 
                         <div class="flex justify-between items-center">

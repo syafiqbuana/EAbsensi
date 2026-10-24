@@ -26,9 +26,14 @@ class LeaveRequestInfolist
                             ->schema([
                                 TextEntry::make('student.name')
                                     ->label('Nama Murid'),
-                                TextEntry::make('date')
-                                    ->label('Tanggal Tidak Hadir')
-                                    ->date('Y-m-d'),
+                                TextEntry::make('start_date')
+                                    ->label('Tanggal Mulai')
+                                    ->date('d M Y'),
+                                TextEntry::make('end_date')
+                                    ->label('Tanggal Selesai')
+                                    ->date('d M Y'),
+                                TextEntry::make('total_days')
+                                    ->label('Total Hari'),
                                 TextEntry::make('type')
                                     ->label('Jenis')
                                     ->badge()

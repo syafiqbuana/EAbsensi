@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\CurrentTpq;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,6 +42,8 @@ class LeaveRequest extends Model
     public static function booted()
     {
         static::creating(function ($leaveRequest) {
+            $leaveRequest->tpq_profile_id ??= CurrentTpq::id();
+
             $leaveRequest->total_days = self::calculateTotalDays(
                 $leaveRequest->student_id,
                 $leaveRequest->start_date,
@@ -64,9 +67,6 @@ class LeaveRequest extends Model
         $activeDays = self::extractActiveDays($schedules);
 
         // 3. Persiapkan lookup tanggal libur (O(1) time complexity)
-        $holidayDates = self::prepareHolidayLookup($start, $end, $scheduleIds);
-        $activeDays = self::extractActiveDays($schedules);
-
         $holidayDates = self::prepareHolidayLookup($start, $end, $scheduleIds);
 
         $totalDays = 0;
@@ -100,8 +100,13 @@ class LeaveRequest extends Model
             'sunday' => Carbon::SUNDAY,
         ];
 
-        // Gunakan fungsi Collection Laravel agar rapi dan tanpa loop bersarang
-        return $schedules->flatMap(fn ($schedule) => explode(',', $schedule->day))
+        // Kolom `day` sudah di-cast menjadi array oleh model Schedules,
+        // jadi jangan di-explode lagi.
+        return $schedules->flatMap(function ($schedule) {
+                $days = $schedule->day;
+
+                return is_array($days) ? $days : explode(',', (string) $days);
+            })
             ->map(fn ($day) => $dayMap[$day] ?? null)
             ->filter() // Membuang nilai null jika ada
             ->unique()
