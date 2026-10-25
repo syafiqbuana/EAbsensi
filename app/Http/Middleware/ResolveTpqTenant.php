@@ -13,14 +13,29 @@ class ResolveTpqTenant
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $slug = $request->route('tpq_slug') ?? session('current_tpq_slug');
+        $routeSlug = $request->route('tpq_slug');
+        $slug = $routeSlug ?? session('current_tpq_slug');
 
         if ($slug && $slug !== 'universal') {
-            $tpq = TpqProfile::active()->bySlug($slug)->first();
+            $tpq = $routeSlug
+                ? TpqProfile::bySlug($slug)->first()
+                : TpqProfile::active()->bySlug($slug)->first();
 
             if (! $tpq) {
                 abort(404, 'TPQ tidak ditemukan.');
             }
+
+            if ($tpq->isSuspended()) {
+                return response()
+                    ->view('tenant.suspended', [
+                        'tpq' => $tpq,
+                        'audience' => $request->routeIs('filament.admin.*')
+                            ? 'tenant-admin'
+                            : 'parent',
+                    ], 403)
+                    ->header('Cache-Control', 'no-store, no-cache, must-revalidate');
+            }
+
             CurrentTpq::setFromProfile($tpq);
             app(PermissionRegistrar::class)->setPermissionsTeamId($tpq->id);
 

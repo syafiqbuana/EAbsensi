@@ -149,6 +149,12 @@ public function authenticate(): ?LoginResponse
         ]);
     }
 
+    if ($tpq->isSuspended()) {
+        throw ValidationException::withMessages([
+            'data.email' => 'TPQ ini sedang ditangguhkan. Silakan hubungi Pengelola Layanan.',
+        ]);
+    }
+
     // Set Spatie Permission team
     app(PermissionRegistrar::class)->setPermissionsTeamId($tpq->id);
     $user->unsetRelation('roles');

@@ -40,4 +40,8 @@ return [
     'admin_whatsapp' => env('ADMIN_WHATSAPP_NUMBER'), // Tambahkan baris ini
 ],
 
+'support' => [
+    'whatsapp' => env('SUPPORT_WHATSAPP_NUMBER', env('ADMIN_WHATSAPP_NUMBER')),
+],
+
 ];

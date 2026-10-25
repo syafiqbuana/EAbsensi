@@ -3,12 +3,14 @@
 namespace App\Filament\Superadmin\Resources\TpqProfiles\Tables;
 
 use App\Models\TpqProfile;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
@@ -66,6 +68,48 @@ class TpqProfilesTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+
+                Action::make('suspend')
+                    ->label('Tangguhkan')
+                    ->icon('heroicon-o-pause-circle')
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    ->modalHeading('Tangguhkan TPQ')
+                    ->modalDescription(fn (TpqProfile $record): string => "TPQ {$record->name} tidak akan dapat diakses melalui portal orang tua dan panel admin sampai diaktifkan kembali.")
+                    ->modalSubmitActionLabel('Ya, Tangguhkan')
+                    ->visible(fn (TpqProfile $record): bool => ! $record->trashed() && $record->isActive())
+                    ->action(function (TpqProfile $record): void {
+                        $record->update([
+                            'status' => TpqProfile::STATUS_SUSPENDED,
+                        ]);
+
+                        Notification::make()
+                            ->title('TPQ berhasil ditangguhkan')
+                            ->body("Akses {$record->name} telah dinonaktifkan.")
+                            ->success()
+                            ->send();
+                    }),
+
+                Action::make('activate')
+                    ->label('Aktifkan')
+                    ->icon('heroicon-o-play-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalHeading('Aktifkan TPQ')
+                    ->modalDescription(fn (TpqProfile $record): string => "TPQ {$record->name} akan dapat diakses kembali melalui portal orang tua dan panel admin.")
+                    ->modalSubmitActionLabel('Ya, Aktifkan')
+                    ->visible(fn (TpqProfile $record): bool => ! $record->trashed() && $record->isSuspended())
+                    ->action(function (TpqProfile $record): void {
+                        $record->update([
+                            'status' => TpqProfile::STATUS_ACTIVE,
+                        ]);
+
+                        Notification::make()
+                            ->title('TPQ berhasil diaktifkan')
+                            ->body("Akses {$record->name} telah dipulihkan.")
+                            ->success()
+                            ->send();
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

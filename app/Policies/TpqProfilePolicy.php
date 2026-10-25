@@ -8,6 +8,10 @@ use Spatie\Permission\PermissionRegistrar;
 
 class TpqProfilePolicy
 {
+    public function before(User $user, string $ability): ?bool
+    {
+        return $user->isSuperAdmin() ? true : null;
+    }
 
     public function update(User $user, TpqProfile $tpqProfile): bool
     {
